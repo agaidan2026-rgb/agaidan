@@ -17,4 +17,5 @@ No compartas un mismo dispositivo/navegador entre clientes: la información loca
 
 ## Actualizaciones y caché
 
-El service worker cachea solo los archivos públicos de la aplicación para reabrirla sin conexión después de visitar el sitio una vez. No cachea documentos ni envía datos. Al desplegar una actualización, incrementa el identificador `agaidan-pwa-v1` en `service-worker.js` para renovar el shell. Para obtener espacio nuevo, el navegador puede requerir conexión.
+El service worker cachea solo los archivos públicos de la aplicación para reabrirla sin conexión después de visitar el sitio una vez. No cachea documentos ni envía datos. Al desplegar una actualización, incrementa el identificador `agaidan-pwa-v3` en `service-worker.js` para renovar el shell. Para obtener espacio nuevo, el navegador puede requerir conexión.
+
