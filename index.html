@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AGAIDAN">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/agaidan.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>AGAIDAN · MVP completo</title>
 <style>
@@ -73,6 +73,20 @@
 @media(max-width:600px){.owner-control-grid{grid-template-columns:1fr}}
 
 .aga-doc-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:145px;border:2px dashed #93c5fd;border-radius:14px;background:#f8fbff;color:#1e3a8a;text-align:center;cursor:pointer;padding:18px}.aga-doc-drop:hover{background:#eff6ff;border-color:#2563eb}.aga-doc-drop small{color:#64748b}.aga-doc-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;margin-top:8px}.aga-doc-item .status{font-size:11px}.aga-doc-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+
+.mobile-nav-bar{display:none;align-items:center;gap:12px;padding:9px 12px;background:#111827;color:#fff}
+.mobile-nav-toggle{border:0;border-radius:8px;background:#1e293b;color:#fff;padding:10px 12px;font-weight:700;font-size:14px;cursor:pointer}
+.mobile-menu-backdrop{position:fixed;inset:0;background:#0008;border:0;padding:0;z-index:39}
+.mobile-menu-backdrop[hidden]{display:none}
+@media(max-width:700px){
+ .mobile-nav-bar{display:flex;position:sticky;top:0;z-index:30}
+ .side{position:fixed;left:0;top:0;bottom:0;width:min(245px,85vw);height:100dvh;padding:18px 13px;overflow:auto;z-index:40;transform:translateX(-105%);transition:transform .2s ease;box-shadow:none}
+ .side.mobile-open{transform:translateX(0);box-shadow:0 0 28px #0006}
+ .logo{font-size:24px;text-align:left}.logo span{font-size:20px}
+ .tag,.group-title,.nav button span{display:block}
+ .nav button{text-align:left;font-size:13px;padding:10px 11px}
+ .main{padding:16px;max-width:none;width:100%;margin:0}
+}
 </style>
 <script>window.addEventListener('error',function(e){try{console.error('AGAIDAN:',e.error||e.message)}catch(_){}});</script><script>
 /* Almacenamiento seguro: el visor de archivos puede bloquear agaStorage. */
@@ -86,8 +100,10 @@ const agaStorage=(()=>{let native=null,memory={};try{native=window.localStorage;
  <span style="display:flex;gap:7px;align-items:center"><button id="pwaInstallButton" type="button" class="button" style="white-space:nowrap">Instalar</button><button id="pwaDismissButton" type="button" aria-label="Cerrar aviso" class="button secondary">×</button></span>
 </aside>
 <div id="pwaIosHelp" role="status" style="display:none;position:fixed;inset:auto 12px 12px;z-index:31;background:#111827;color:white;padding:16px;border-radius:12px;font:14px Arial,sans-serif;box-shadow:0 4px 20px #0004">Para instalar AGAIDAN en iPhone/iPad: pulsa <b>Compartir</b> y después <b>Añadir a pantalla de inicio</b>. <button id="pwaIosClose" type="button" style="float:right">Cerrar</button></div>
+<div class="mobile-nav-bar"><button id="mobileNavToggle" type="button" class="mobile-nav-toggle" aria-controls="primaryNavigation" aria-expanded="false">☰ Menú</button><b>AGAIDAN</b></div>
+<button id="mobileMenuBackdrop" class="mobile-menu-backdrop" type="button" aria-label="Cerrar menú" hidden></button>
 <div class="app">
-<aside class="side">
+<aside class="side" id="primaryNavigation">
 <div class="logo">AGAIDAN</div><div class="tag">Copiloto integral del dueño</div>
 <div class="group-title">Gestión</div><nav class="nav">
 <button class="active" data-view="inicio">🏠 <span>Resumen</span></button>
@@ -1464,5 +1480,11 @@ document.addEventListener('DOMContentLoaded',()=>{agaInitDocDrop();agaRenderDocu
  });
  document.getElementById('pwaDismissButton').addEventListener('click',()=>{sessionStorage.setItem('agaidan-install-dismissed','1');notice.style.display='none'});
  document.getElementById('pwaIosClose').addEventListener('click',()=>document.getElementById('pwaIosHelp').style.display='none');
+ const side=document.getElementById('primaryNavigation'), menuToggle=document.getElementById('mobileNavToggle'), backdrop=document.getElementById('mobileMenuBackdrop');
+ const closeMenu=()=>{side.classList.remove('mobile-open');backdrop.hidden=true;menuToggle.setAttribute('aria-expanded','false')};
+ menuToggle.addEventListener('click',()=>{const open=!side.classList.contains('mobile-open');side.classList.toggle('mobile-open',open);backdrop.hidden=!open;menuToggle.setAttribute('aria-expanded',String(open))});
+ backdrop.addEventListener('click',closeMenu);
+ side.querySelectorAll('.nav button').forEach(button=>button.addEventListener('click',closeMenu));
+ document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu()});
 })();
 </script></body></html>
