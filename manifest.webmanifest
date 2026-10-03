@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "AGAIDAN · Copiloto integral del dueño",
+  "short_name": "AGAIDAN",
+  "description": "AGAIDAN, copiloto integral del dueño para organizar el negocio.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f5f7fb",
+  "theme_color": "#111827",
+  "icons": [
+    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"icons/icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"},
+    {"src":"icons/agaidan.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}
+  ]
+}

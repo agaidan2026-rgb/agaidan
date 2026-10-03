@@ -1,0 +1,1468 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="AGAIDAN, copiloto integral del dueño para organizar el negocio.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AGAIDAN">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/agaidan.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>AGAIDAN · MVP completo</title>
+<style>
+:root{--navy:#111827;--blue:#2563eb;--soft:#f5f7fb;--line:#e2e8f0;--ink:#172033;--muted:#64748b;--green:#15803d;--amber:#b45309;--red:#b91c1c;--violet:#6d28d9}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--soft);color:var(--ink)}
+.app{display:flex;min-height:100vh}.side{width:245px;background:var(--navy);color:#fff;padding:22px 13px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow:auto}
+.logo{font-size:24px;font-weight:800;margin-bottom:5px}.logo span{color:#60a5fa}.tag{color:#94a3b8;font-size:12px;margin-bottom:20px}
+.group-title{color:#64748b;text-transform:uppercase;font-size:10px;letter-spacing:.1em;margin:18px 10px 5px}
+.nav button{display:block;width:100%;padding:10px 11px;border:0;border-radius:9px;background:transparent;color:#cbd5e1;text-align:left;margin:3px 0;cursor:pointer;font-size:13px}.nav button:hover,.nav button.active{background:#1e293b;color:#fff}
+.main{flex:1;padding:28px;max-width:1280px;margin:auto}.view{display:none}.view.active{display:block}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}.top h1{margin:0;font-size:28px}.muted{color:var(--muted);font-size:13px}
+.badge{background:#dbeafe;color:#1d4ed8;padding:7px 11px;border-radius:20px;font-size:11px;font-weight:700}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}.card,.panel{background:#fff;border-radius:15px;padding:19px;box-shadow:0 3px 12px #0000000b}
+.num{font-size:28px;font-weight:800;margin-top:6px}.blue{color:#2563eb}.red{color:#dc2626}.orange{color:#d97706}.green{color:#15803d}.violet{color:#6d28d9}
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-top:18px}h2{font-size:18px;margin-top:0}h3{font-size:15px}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.action{background:white;border:1px solid var(--line);border-radius:11px;padding:15px;text-align:left;cursor:pointer}.action:hover{border-color:#60a5fa}.icon{font-size:21px}.action b{display:block;margin-top:6px}
+.note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:11px;font-size:12px;color:#92400e;margin:12px 0}.info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:11px;font-size:12px;color:#1e40af;margin:12px 0}
+.filters{display:grid;grid-template-columns:1.2fr 1fr .7fr auto;gap:9px;margin:18px 0}.filters input,.filters select,.composer input,.composer select,.form input,.form select,.form textarea{border:1px solid var(--line);background:#fff;padding:10px;border-radius:9px;font:inherit;width:100%}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.form .full{grid-column:1/-1}.form textarea{min-height:85px;resize:vertical}
+.button{border:0;background:var(--blue);color:white;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}.button.secondary{background:#edf4ff;color:#1d4ed8}.button.danger{background:#fee2e2;color:#991b1b}.button.green{background:#dcfce7;color:#166534}
+.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.cliente.potencial{border:1px solid var(--line);border-radius:13px;padding:17px;background:#fff}.cliente.potencial h3{margin:8px 0 5px}.cliente.potencial p{margin:5px 0}.opp,.status{display:inline-block;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:700}.high{background:#dcfce7;color:#166534}.medium{background:#fef3c7;color:#92400e}.low{background:#f1f5f9;color:#475569}.risk{background:#fee2e2;color:#991b1b}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;font-size:12px}.meta div{background:#f8fafc;padding:8px;border-radius:8px}.card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.table-wrap{overflow-x:auto}.table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px}.table th,.table td{text-align:left;padding:13px 18px;border-bottom:1px solid #eef2f7;font-size:12px;vertical-align:top;white-space:nowrap}.table th{color:var(--muted);font-weight:700}.table th+th,.table td+td{padding-left:24px}.table th:first-child,.table td:first-child{padding-left:10px}.table th:last-child,.table td:last-child{padding-right:10px}
+.empty{padding:28px;text-align:center;border:1px dashed #cbd5e1;border-radius:12px;color:var(--muted)}
+.chat{height:360px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px}.msg{max-width:88%;padding:11px 13px;border-radius:11px;margin:0 0 12px;background:#eef5ff}.owner-review{display:grid;gap:12px;margin-top:10px}.owner-review-item{padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}.owner-review-item b{display:block;margin-bottom:5px}.owner-review-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}.msg.me{margin-left:auto;background:#102a43;color:#fff}.composer{display:flex;gap:8px;margin-top:10px}.composer input{flex:1}
+.follow{padding:12px 0;border-bottom:1px solid #eef2f7}.pill{float:right;background:#fee2e2;color:#991b1b;padding:5px 8px;border-radius:12px;font-size:10px}
+.modal-back{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal{background:#fff;max-width:760px;width:100%;max-height:92vh;overflow:auto;border-radius:16px;padding:22px}.modal-head{display:flex;justify-content:space-between;gap:10px}.close{border:0;background:#f1f5f9;border-radius:8px;padding:8px;cursor:pointer}
+.section{margin-top:17px}.section h3{margin-bottom:8px}.history{border-left:3px solid #bfdbfe;padding-left:12px;margin:9px 0}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}.tab{border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:8px;cursor:pointer}.tab.active{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
+.kpi{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eef2f7}.small{font-size:11px}.ok{color:#166534}.warn{color:#92400e}.driver-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.driver-summary div{background:#f8fafc;padding:10px;border-radius:9px}.driver-entry{border:1px solid var(--line);border-radius:11px;padding:12px;margin:10px 0}.driver-entry b{display:block;margin-bottom:5px}.finance-question-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}.finance-question{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}.finance-question:hover{border-color:#93c5fd;background:#f8fbff}.finance-answer{margin-top:14px}@media(max-width:900px){.finance-question-list{grid-template-columns:1fr}}@media(max-width:900px){.driver-summary{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.side{width:68px;padding:18px 7px}.logo{font-size:0;text-align:center}.logo span{font-size:20px}.tag,.group-title,.nav button span{display:none}.nav button{text-align:center;font-size:0}.main{padding:16px}.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.filters,.form{grid-template-columns:1fr}.form .full{grid-column:auto}}
+
+/* Mi negocio: selección de actividad más ordenada */
+.business-profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:12px}
+.business-profile-card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;background:#fff}
+.business-profile-card h4{margin:0 0 4px;font-size:15px}
+.business-profile-card .helper{margin:0 0 12px;font-size:12px;color:#6b7280}
+.business-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.business-choice{display:flex!important;align-items:center;gap:9px;padding:9px 10px;border:1px solid #e5e7eb;border-radius:9px;background:#fafafa;cursor:pointer;margin:0!important}
+.business-choice:hover{border-color:#cbd5e1;background:#f8fafc}
+.business-choice input{margin:0!important;width:16px;height:16px;flex:0 0 auto}
+@media(max-width:700px){.business-profile-grid{grid-template-columns:1fr}.business-choice-grid{grid-template-columns:1fr}}
+
+/* AGAIDAN V2 · Resumen del negocio */
+.owner-control{margin-top:18px}
+.owner-control-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.owner-control-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.owner-kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px}
+.owner-kpi .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.owner-kpi .value{font-size:22px;font-weight:800;margin-top:5px}
+.owner-insights{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:16px}
+.insight-list{display:grid;gap:9px}
+.insight-item{border:1px solid var(--line);border-radius:11px;padding:12px;background:#fff}
+.insight-item .insight-title{font-weight:800;margin-bottom:4px}
+.insight-item .insight-action{margin-top:8px;display:inline-block}
+.insight-danger{border-left:4px solid #dc2626}.insight-warn{border-left:4px solid #d97706}.insight-info{border-left:4px solid #2563eb}.insight-ok{border-left:4px solid #15803d}
+.owner-table{width:100%;border-collapse:collapse;font-size:12px}.owner-table th,.owner-table td{padding:9px 6px;border-bottom:1px solid #eef2f7;text-align:left}.owner-table th{color:var(--muted);font-weight:700}
+.ai-chip-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.ai-chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:8px 10px;cursor:pointer;font-size:12px}.ai-chip:hover{border-color:#93c5fd;background:#f8fbff}
+.data-origin{font-size:10px;color:var(--muted);margin-top:7px}
+@media(max-width:1000px){.owner-control-grid{grid-template-columns:repeat(2,1fr)}.owner-insights{grid-template-columns:1fr}}
+@media(max-width:600px){.owner-control-grid{grid-template-columns:1fr}}
+
+.aga-doc-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:145px;border:2px dashed #93c5fd;border-radius:14px;background:#f8fbff;color:#1e3a8a;text-align:center;cursor:pointer;padding:18px}.aga-doc-drop:hover{background:#eff6ff;border-color:#2563eb}.aga-doc-drop small{color:#64748b}.aga-doc-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;margin-top:8px}.aga-doc-item .status{font-size:11px}.aga-doc-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+</style>
+<script>window.addEventListener('error',function(e){try{console.error('AGAIDAN:',e.error||e.message)}catch(_){}});</script><script>
+/* Almacenamiento seguro: el visor de archivos puede bloquear agaStorage. */
+const agaStorage=(()=>{let native=null,memory={};try{native=window.localStorage;const k="__agaidan_test__";native.setItem(k,"1");native.removeItem(k)}catch(e){native=null}return{getItem(k){try{return native?native.getItem(k):(Object.prototype.hasOwnProperty.call(memory,k)?memory[k]:null)}catch(e){return Object.prototype.hasOwnProperty.call(memory,k)?memory[k]:null}},setItem(k,v){memory[k]=String(v);try{if(native)native.setItem(k,String(v))}catch(e){}},removeItem(k){delete memory[k];try{if(native)native.removeItem(k)}catch(e){}}}})();
+</script>
+</head>
+<body>
+<div role="note" style="background:#fff7d6;border-bottom:1px solid #f4d06f;padding:9px 14px;font:13px Arial,sans-serif;color:#654b00"><b>Importante:</b> los datos de AGAIDAN se guardan solo en este dispositivo y navegador. No hay cuentas ni sincronización. Exporta copias desde Datos e importación.</div>
+<aside id="pwaInstallNotice" role="region" aria-label="Instalar AGAIDAN" style="display:none;position:sticky;top:0;z-index:30;background:#eaf2ff;border-bottom:1px solid #bfdbfe;padding:10px 14px;align-items:center;justify-content:space-between;gap:12px;font:14px Arial,sans-serif;color:#172033">
+ <span><b>AGAIDAN en tu dispositivo</b><br><small>Instálalo para abrirlo desde la pantalla de inicio. Tus datos siguen guardados solo aquí.</small></span>
+ <span style="display:flex;gap:7px;align-items:center"><button id="pwaInstallButton" type="button" class="button" style="white-space:nowrap">Instalar</button><button id="pwaDismissButton" type="button" aria-label="Cerrar aviso" class="button secondary">×</button></span>
+</aside>
+<div id="pwaIosHelp" role="status" style="display:none;position:fixed;inset:auto 12px 12px;z-index:31;background:#111827;color:white;padding:16px;border-radius:12px;font:14px Arial,sans-serif;box-shadow:0 4px 20px #0004">Para instalar AGAIDAN en iPhone/iPad: pulsa <b>Compartir</b> y después <b>Añadir a pantalla de inicio</b>. <button id="pwaIosClose" type="button" style="float:right">Cerrar</button></div>
+<div class="app">
+<aside class="side">
+<div class="logo">AGAIDAN</div><div class="tag">Copiloto integral del dueño</div>
+<div class="group-title">Gestión</div><nav class="nav">
+<button class="active" data-view="inicio">🏠 <span>Resumen</span></button>
+<button data-view="clientes potenciales">🔎 <span>Buscar clientes</span></button>
+<button data-view="clientes">👥 <span>Clientes</span></button>
+<button data-view="inactivos">🔎 <span>Clientes para revisar</span></button>
+<button data-view="alertas">⚠️ <span>Alertas</span></button>
+<button data-view="seguimientos">📞 <span>Seguimientos</span></button>
+<button data-view="rutas">🗺️ <span>Rutas</span></button>
+<button data-view="analisis">📊 <span>Análisis</span></button><button data-view="segmentos">🎯 <span>Segmentos</span></button>
+</nav>
+<div class="group-title">Operación</div><nav class="nav">
+<button data-view="conductor">🚚 <span>AGAIDAN Conductor</span></button>
+</nav>
+<div class="group-title">🤖 Inteligencia</div><nav class="nav">
+<button data-view="finanzas">💶 <span>Finanzas</span></button>
+<button data-view="cobros">💳 <span>Cobros</span></button>
+<button data-view="ventas">📈 <span>Ventas</span></button>
+<button data-view="albaranes">📄 <span>Albaranes</span></button>
+<button data-view="productos">📦 <span>Productos</span></button>
+<button data-view="dueno">🧠 <span>Asistente IA</span></button>
+</nav>
+<div class="group-title">Configuración</div><nav class="nav">
+<button data-view="empresa">⚙️ <span>Mi negocio</span></button>
+<button data-view="datos">📥 <span>Datos e importación</span></button>
+</nav>
+</aside>
+
+<main class="main">
+<section id="inicio" class="view active">
+<div class="top"><div><h1>Buenos días 👋</h1><div class="muted" id="companySubtitle">Tu resumen del negocio</div></div><div class="badge">COPILOTO DEL DUEÑO · DATOS LOCALES</div></div>
+<div class="note"><b>Cómo trabaja AGAIDAN:</b> propone → tú revisas → tú confirmas → el sistema guarda. Las alertas de esta pantalla se generan únicamente con registros disponibles en este dispositivo; si falta un dato, se indica como tal.</div>
+
+<div class="owner-control">
+  <div class="panel">
+    <div class="owner-control-head">
+      <div><h2>🧠 Resumen del negocio</h2><p class="muted">Ventas, cajas, cobros, gastos y rutas en un solo lugar.</p></div>
+      <button class="button secondary" type="button" onclick="renderOwnerControl()">↻ Actualizar</button>
+    </div>
+    <div class="owner-control-grid">
+      <div class="owner-kpi"><div class="label">Ventas</div><div class="value blue" id="ownerKpiSales">—</div><div class="data-origin">Solo datos guardados</div></div>
+      <div class="owner-kpi"><div class="label">Cajas</div><div class="value" id="ownerKpiBoxes">—</div><div class="data-origin">Solo cajas con cantidad conocida</div></div>
+      <div class="owner-kpi"><div class="label">Cobros pendientes registrados</div><div class="value orange" id="ownerKpiPending">—</div><div class="data-origin">Ventas − cobros guardados</div></div>
+      <div class="owner-kpi"><div class="label">Ganancia calculada</div><div class="value green" id="ownerKpiMargin">—</div><div class="data-origin">Ventas − gastos guardados</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="owner-insights">
+  <section class="panel"><div class="section-head"><div><h2>🧠 Resumen de hoy</h2><p class="muted">Hasta 3 cosas importantes para revisar, calculadas con los datos registrados.</p></div><button class="button secondary" type="button" onclick="renderOwnerControl()">Actualizar</button></div><div id="ownerBriefing" class="insight-list"></div></section>
+  <section class="panel"><h2>🔎 Qué revisar hoy</h2><div id="ownerTodayInsights" class="insight-list"></div></section>
+</div>
+
+<div class="owner-insights">
+  <section class="panel"><h2>🎯 Oportunidades</h2><div id="ownerOpportunityInsights" class="insight-list"></div></section>
+  <section class="panel"><h2>📦 Ventas por cajas</h2><div id="ownerBoxInsights"></div></section>
+</div>
+
+<div class="owner-insights">
+  <section class="panel"><h2>🚚 Resultados por ruta</h2><div id="ownerRouteInsights"></div></section>
+  <section class="panel"><h2>⚠️ Problemas detectados</h2><div id="ownerAlertInsights" class="insight-list"></div></section>
+</div>
+
+<div class="cards">
+<div class="card"><div class="muted">Clientes importados</div><div class="num" id="homeClientCount">0</div></div>
+<div class="card"><div class="muted">Oportunidades</div><div class="num blue" id="homeOppCount">—</div></div>
+<div class="card"><div class="muted">Alertas</div><div class="num red" id="homeAlertCount">—</div></div>
+<div class="card"><div class="muted">Seguimientos guardados</div><div class="num orange" id="followCount">0</div></div>
+</div>
+
+<div class="grid">
+<section class="panel"><h2>🚀 Acciones rápidas</h2><div class="actions">
+<button class="action" onclick="go('clientes potenciales')">🔎<b>Buscar nuevos clientes</b><small class="muted">Prospección por zona y tipo</small></button>
+<button class="action" onclick="go('alertas')">⚠️<b>Revisar alertas</b><small class="muted">Problemas detectados con datos registrados</small></button>
+<button class="action" onclick="go('rutas')">🗺️<b>Preparar ruta</b><small class="muted">Ordenar visitas manualmente</small></button>
+<button class="action" onclick="go('dueno')">🧠<b>Preguntar a AGAIDAN</b><small class="muted">Ventas, cajas, gastos, cobros y rutas</small></button>
+</div></section>
+<section class="panel"><h2>📅 Próximos seguimientos</h2><div id="homeFollow"></div></section>
+</div>
+</section>
+
+<section id="clientes potenciales" class="view">
+<div class="top"><div><h1>Buscar clientes</h1><p class="muted">Busca nuevos negocios por zona. Los clientes importados y registrados no aparecen aquí; primero selecciona una zona o ciudad.</p></div></div>
+<div class="filters">
+<input id="zone" placeholder="Zona / ciudad">
+<select id="type">
+<option value="">Todos los negocios</option>
+<option>Restaurante</option>
+<option>Bar</option>
+<option>Cafetería</option>
+<option>Tienda</option>
+<option>Hotel</option>
+<option>Panadería</option>
+</select>
+<select id="radius">
+<option value="99">Cualquier distancia</option>
+<option value="1">Hasta 1 km</option>
+<option value="3">Hasta 3 km</option>
+<option value="5">Hasta 5 km</option>
+<option value="10">Hasta 10 km</option>
+<option value="20">Hasta 20 km</option>
+<option value="50">Hasta 50 km</option>
+</select>
+<button type="button" class="button" onclick="renderProspects()">Buscar</button>
+</div>
+<div class="info">La distancia de esta demo es orientativa para priorización interna; no se presenta como una ruta GPS real.</div>
+<div id="results" class="results"><div class="empty">Selecciona una zona o ciudad para comenzar la búsqueda.</div></div>
+</section>
+
+<section id="clientes" class="view"><h1>Clientes</h1><p class="muted">Aquí aparecen los clientes importados o registrados en AGAIDAN. La actividad financiera se consulta en Finanzas, Cobros y Ventas.</p><div class="panel"><h3>👥 Clientes</h3><div id="importedClientsMain"></div></div></section>
+
+<section id="inactivos" class="view"><h1>Clientes para revisar</h1><p class="muted">AGAIDAN solo muestra aquí clientes con histórico suficiente para detectar una posible pérdida de actividad.</p><div class="note">Regla actual: mínimo 2 compras registradas y más de 30 días desde la última compra. Si faltan datos, AGAIDAN no afirma que el cliente esté inactivo.</div><div id="inactiveClientsList" class="results"></div></section>
+
+<section id="riesgo" class="view"><h1>Alertas</h1><p class="muted">Señales pendientes de datos reales.</p><div class="panel"><h2>Ejemplo</h2><p><b>Restaurante Alameda</b> · posible cambio de frecuencia.</p><p class="muted">La demo no tiene histórico suficiente para confirmar una caída.</p><div class="note">Cuando exista histórico, mostrar: período comparado, variación, productos afectados y dato de origen.</div></div></section>
+
+<section id="alertas" class="view">
+<div class="top"><div><h1>Alertas</h1><p class="muted">Situaciones que requieren atención. No cambian el estado principal del cliente.</p></div></div>
+<div class="panel"><h2>⚠️ Señales detectadas</h2><div id="alertsDynamicList" class="insight-list"></div></div>
+<div class="panel"><h2>Cómo interpreta AGAIDAN una alerta</h2><p class="muted"><b>Dato registrado → señal → explicación → acción propuesta.</b> Por ejemplo, una venta sin variedad no significa que haya un problema comercial; significa que falta información para analizar el producto. AGAIDAN no convierte un dato incompleto en una afirmación.</p><div class="note"><b>Importante:</b> “pendiente” significa venta registrada menos cobro registrado. No equivale por sí solo a una deuda verificada.</div></div>
+</section>
+<section id="seguimientos" class="view"><div class="top"><div><h1>Seguimientos</h1><p class="muted">Registros creados y confirmados por el usuario.</p></div></div><div id="followList" class="panel" style="margin-top:18px"></div></section>
+
+<section id="rutas" class="view">
+<div class="top">
+  <div>
+    <h1>Rutas</h1>
+    <p class="muted">Organiza las visitas, prepara cada parada y abre el guiado cuando tengas una integración de mapas disponible.</p>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="top" style="margin-bottom:12px">
+    <div>
+      <h2>🗺️ Ruta 1</h2>
+      <p class="muted">Selecciona, ordena y prepara tus visitas.</p>
+    </div>
+    <div class="card-actions">
+      <button type="button" class="button secondary" onclick="sortRouteByDistance()">📍 Ordenar por cercanía</button>
+      <button type="button" class="button secondary" onclick="go('clientes potenciales')">＋ Añadir clientes potenciales</button>
+      <button type="button" class="button danger" onclick="clearRoute()">Limpiar ruta</button>
+    </div>
+  </div>
+  <div id="routeSummary" class="note"></div>
+  <div id="routeList" class="route-list"></div>
+</div>
+
+<div class="panel">
+  <h2>🧭 Navegación</h2>
+  <p class="muted">En esta demo podemos ordenar por distancia. La navegación se abrirá en el mapa para llevarte hasta cada parada.</p>
+  <div class="meta">
+    <div><b>Ahora</b><br>Orden por distancia de la demo</div>
+    <div><b>Después</b><br>Ruta optimizada con mapa</div>
+    <div><b>Navegación</b><br>Abrir el mapa hasta cada parada</div>
+  </div>
+</div>
+</section>
+
+<section id="segmentos" class="view">
+<div class="top"><div><h1>Segmentos</h1><p class="muted">Organiza tus clientes por tipo y zona para entender cómo está formada tu cartera.</p></div></div>
+<div class="note"><b>Datos reales/importados.</b> Los segmentos se calculan únicamente con los clientes que hayas registrado o importado. No se inventan clientes ni actividad financiera.</div>
+<div id="segmentSummary" class="grid three" style="margin-top:18px"></div>
+<div class="panel" style="margin-top:18px"><h2>¿Para qué sirve?</h2><p class="muted">Te permite ver, por ejemplo, cuántos restaurantes, bares, cafeterías u hoteles tienes como clientes y en qué zonas se concentran. Desde aquí puedes identificar dónde tienes más clientes antes de decidir dónde buscar nuevos negocios.</p></div>
+</section>
+
+
+<section id="conductor" class="view">
+  <div class="top">
+    <div>
+      <h1>🚚 AGAIDAN Conductor</h1>
+      <p class="muted">Interfaz sencilla para que el conductor registre su jornada y los gastos del vehículo.</p>
+    </div>
+    <div class="badge">DEMO · DATOS LOCALES</div>
+  </div>
+
+  <div class="note"><b>Flujo:</b> Conductor registra → revisa → confirma → AGAIDAN guarda → el dueño consulta y analiza.</div>
+
+  <div class="card">
+    <div class="section-head">
+      <div><h3>📅 Mi jornada</h3><p class="muted">Completa los datos de la jornada. Nada se guarda hasta confirmar.</p><div class="note">🔒 Tu acceso de conductor está vinculado a un único camión. No puedes cambiar de camión ni consultar los conductores de los demás vehículos.</div></div>
+      <span id="driverSessionStatus" class="status low">Jornada no iniciada</span>
+    </div>
+    <div class="form">
+      <div><label class="small">Conductor asignado</label><input id="driverName" placeholder="Se carga desde el camión configurado" readonly></div>
+      <div><label class="small">Mi camión</label><input id="driverTruck" value="" readonly></div>
+      <div><label class="small">Mi ruta</label><input id="driverRoute" value="" readonly></div>
+      <div><label class="small">Fecha</label><input id="driverDate" type="date"></div>
+    </div>
+    <div class="card-actions">
+      <button type="button" class="button green" onclick="startDriverShift()">▶ Iniciar jornada</button>
+      <button type="button" class="button secondary" onclick="endDriverShift()">⏹ Finalizar jornada</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>🛣️ Kilometraje</h3>
+      <div class="form">
+        <div><label class="small">Km inicial</label><input id="kmStart" type="number" min="0" step="1" placeholder="Ej. 125430"></div>
+        <div><label class="small">Km final</label><input id="kmEnd" type="number" min="0" step="1" placeholder="Ej. 125620"></div>
+      </div>
+      <div id="kmPreview" class="info">Introduce km inicial y final para calcular los kilómetros de la jornada.</div>
+    </div>
+
+    <div class="card">
+      <h3>⛽ Combustible</h3>
+      <div class="form">
+        <div><label class="small">Litros</label><input id="fuelLiters" type="number" min="0" step="0.01" placeholder="Ej. 85,5"></div>
+        <div><label class="small">Importe (€)</label><input id="fuelAmount" type="number" min="0" step="0.01" placeholder="Ej. 132,40"></div>
+        <div class="full"><label class="small">Estación</label><input id="fuelStation" placeholder="Nombre de la estación"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>💶 Otros gastos</h3>
+    <div class="form">
+      <div><label class="small">Peajes (€)</label><input id="tollAmount" type="number" min="0" step="0.01" value="0"></div>
+      <div><label class="small">Parking (€)</label><input id="parkingAmount" type="number" min="0" step="0.01" value="0"></div>
+      <div><label class="small">Reparaciones (€)</label><input id="repairAmount" type="number" min="0" step="0.01" value="0"></div>
+      <div><label class="small">Otros (€)</label><input id="otherAmount" type="number" min="0" step="0.01" value="0"></div>
+      <div class="full"><label class="small">Notas</label><textarea id="driverNotes" placeholder="Observaciones de la jornada"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📸 Ticket / justificante</h3>
+    <p class="muted">En esta demo solo preparamos el registro de la foto. La lectura automática mediante OCR se incorporará en una fase posterior.</p>
+    <button type="button" class="button" onclick="document.getElementById('receiptFile').click()">📷 Tomar foto del ticket</button>
+    <input id="receiptFile" type="file" accept="image/*" capture="environment" style="display:none">
+    <div id="receiptPreview" class="info">Pulsa “Tomar foto del ticket” para hacer una foto con el móvil.</div>
+  </div>
+
+  <div class="card">
+    <h3>🔎 Revisión antes de guardar</h3>
+    <div id="driverReview" class="empty">Completa los datos y pulsa “Revisar jornada”.</div>
+    <div class="card-actions">
+      <button type="button" class="button" onclick="reviewDriverEntry()">Revisar jornada</button>
+      <button type="button" class="button green" id="confirmDriverBtn" onclick="confirmDriverEntry()" disabled>✅ Confirmar y guardar</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-head"><div><h3>📋 Mi último registro</h3><p class="muted">Aquí solo se muestra la última jornada que este conductor ha confirmado. El historial completo queda disponible para el dueño.</p></div></div>
+    <div id="driverEntries"></div>
+  </div>
+</section>
+
+<section id="finanzas" class="view">
+  <div class="section-head">
+    <div>
+      <h2>💶 Finanzas</h2>
+      <p>Vista financiera del negocio: ingresos, cobros, gastos, camiones, rutas y margen.</p>
+    </div>
+  </div>
+
+  <div class="notice">
+    <strong>Datos y cálculos registrados</strong><br>
+    Las ventas y cobros proceden de los registros guardados. Los gastos y kilómetros de AGAIDAN Conductor proceden de jornadas confirmadas en este dispositivo. Cuando un dato no está registrado, AGAIDAN no lo inventa.
+  </div>
+
+<div class="card"><h3>📊 Resumen financiero</h3><p class="muted">Ventas, cobros, gastos y margen calculado.</p><div id="financeKpis" class="cards four"></div></div>
+
+<div class="card">
+    <div class="section-head">
+      <div>
+        <h3>🚚 Rendimiento por camión</h3>
+        <p>El dueño puede comparar ventas, gastos, kilómetros y margen por vehículo.</p>
+      </div>
+      <select id="truckFilter" onchange="filterTruckFinance()">
+        <option value="all">Todos los camiones</option>
+        <option value="1">Camión 1</option>
+        <option value="2">Camión 2</option>
+        <option value="3">Camión 3</option>
+        <option value="4">Camión 4</option>
+        <option value="5">Camión 5</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Camión</th><th>Ruta</th><th>Cajas</th><th>Ventas</th><th>Gastos</th><th>Km</th><th>Margen</th></tr></thead>
+        <tbody id="truckFinanceBody"></tbody>
+      </table>
+    </div>
+    <small>Ventas y margen solo aparecerán cuando existan datos de ventas reales conectados. Los gastos y km proceden de registros confirmados por los conductores.</small>
+  </div>
+
+<div class="card">
+    <h3>🗺️ Resultados por ruta</h3>
+    <div class="grid2" style="margin:12px 0">
+      <label>🚚 Camión
+        <select id="financeRouteTruckFilter" onchange="renderOwnerOperationalFinance()">
+          <option value="">Todos los camiones</option>
+        </select>
+      </label>
+      <label>🛣️ Ruta
+        <select id="financeRouteFilter" onchange="renderOwnerOperationalFinance()">
+          <option value="">Todas las rutas</option>
+        </select>
+      </label>
+    </div>
+    <div id="routeFinanceTotals" class="note" style="margin-bottom:12px"></div>
+    <div id="routeFinanceBody" class="grid-3"></div>
+    <small>La ruta se toma de la configuración del camión. Si un registro antiguo contiene una ciudad o zona en el campo de ruta pero el camión tiene una ruta configurada, AGAIDAN usa la ruta configurada. Si no existe una ruta configurada, muestra “Ruta no configurada” y no convierte la ciudad en una ruta.</small>
+  </div>
+
+<div class="card" id="ownerDriverLiveCard">
+    <div class="section-head">
+      <div>
+        <h3>🚚 Datos recibidos de AGAIDAN Conductor</h3>
+        <p class="muted">Aquí aparecen los registros de jornada que el conductor ha revisado y confirmado. Estos datos alimentan los costes y el rendimiento financiero del camión y de la ruta.</p>
+      </div>
+      <span id="ownerDriverCount" class="badge">0</span>
+    </div>
+    <div id="ownerDriverLive"></div>
+  </div>
+
+<div class="card"><h3>📄 Ventas y cobros</h3><div class="grid2"><div><h4>Ventas</h4><div id="financeSalesDetail"></div></div><div><h4>Cobros registrados</h4><div id="financeCollectionsDetail"></div></div></div><div class="note" style="margin-top:12px">Las ventas se registran por cajas y variedades. Los cobros se registran por importe y cliente.</div></div>
+
+<div class="card">
+    <h3>🧾 Gastos registrados</h3>
+    <p class="muted">Estos datos se actualizan con los registros confirmados desde la interfaz del conductor en este mismo dispositivo.</p>
+    <div id="driverFinanceSummary" class="driver-summary"></div>
+    <div id="driverFinanceList"></div>
+  </div>
+
+<div class="card">
+    <h3>🤖 Asistente IA sobre Finanzas</h3>
+    <p>Preguntas preparadas para analizar cada aspecto por separado. Pulsa una para ver qué respondería AGAIDAN con los datos disponibles.</p>
+    <div class="finance-question-list">
+      <button type="button" class="finance-question" onclick="askFinance('¿Qué camión genera más ventas?')">🚚 ¿Qué camión genera más ventas?</button>
+      <button type="button" class="finance-question" onclick="askFinance('¿Qué ruta deja más margen?')">🛣️ ¿Qué ruta deja más margen?</button>
+      <button type="button" class="finance-question" onclick="askFinance('¿Dónde tenemos más gastos?')">💶 ¿Dónde tenemos más gastos?</button>
+      <button type="button" class="finance-question" onclick="askFinance('¿Cuánto hemos gastado en combustible por ruta?')">⛽ ¿Cuánto hemos gastado en combustible por ruta?</button>
+      <button type="button" class="finance-question" onclick="askFinance('¿Qué tengo pendiente de cobrar?')">💳 ¿Qué tengo pendiente de cobrar?</button>
+    </div>
+    <div id="financeAnswer" class="finance-answer info">Selecciona una pregunta para consultar la respuesta de la demo.</div>
+    <small>En esta demo no hay conexiones reales con contabilidad, bancos, combustible ni dispositivos de los conductores. Las cifras mostradas son de demostración.</small>
+  </div>
+</section>
+
+
+<script>
+
+const driverStorageKey='agaidan-driver-entries';
+const driverSessionKey='agaidan-driver-session';
+let driverPending=null;
+function driverEntries(){try{let raw=agaStorage.getItem(driverStorageKey);if(!raw){raw='[]';agaStorage.setItem(driverStorageKey,raw)}return JSON.parse(raw||'[]')}catch(e){return []}}
+function saveDriverEntries(list){agaStorage.setItem(driverStorageKey,JSON.stringify(list))}
+function initDriver(){
+  const d=new Date();
+  const iso=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  const date=document.getElementById('driverDate'); if(date&&!date.value)date.value=iso;
+  renderDriverEntries(); renderDriverFinance(); updateKmPreview();
+  ['kmStart','kmEnd'].forEach(id=>document.getElementById(id)?.addEventListener('input',updateKmPreview));
+  document.getElementById('receiptFile')?.addEventListener('change',previewReceipt);
+  const session=agaStorage.getItem(driverSessionKey);
+  if(session){const s=JSON.parse(session);setDriverStatus('Jornada en curso · '+(s.truck||'Camión'));}
+}
+function setDriverStatus(text){const el=document.getElementById('driverSessionStatus');if(el)el.textContent=text}
+function startDriverShift(){
+  const truck=document.getElementById('driverTruck').value, route=document.getElementById('driverRoute').value, name=document.getElementById('driverName').value.trim();
+  agaStorage.setItem(driverSessionKey,JSON.stringify({truck,route,name,date:document.getElementById('driverDate').value,start:new Date().toISOString()}));
+  setDriverStatus('Jornada en curso · '+truck); alert('Jornada iniciada localmente.');
+}
+function endDriverShift(){
+  if(!agaStorage.getItem(driverSessionKey)){alert('No hay una jornada iniciada.');return}
+  const s=JSON.parse(agaStorage.getItem(driverSessionKey));s.end=new Date().toISOString();agaStorage.removeItem(driverSessionKey);setDriverStatus('Jornada finalizada');alert('Jornada finalizada. Ahora puedes revisar y confirmar el registro.');
+}
+function num(id){const v=parseFloat(document.getElementById(id)?.value);return Number.isFinite(v)?v:0}
+function updateKmPreview(){const a=num('kmStart'),b=num('kmEnd'),box=document.getElementById('kmPreview');if(!box)return;if(a&&b){const km=b-a;box.innerHTML=km>=0?'<b>Kilómetros de la jornada:</b> '+km.toLocaleString('es-ES')+' km':'<b>Revisar:</b> el km final no puede ser inferior al inicial.'}else box.textContent='Introduce km inicial y final para calcular los kilómetros de la jornada.'}
+function previewReceipt(e){const f=e.target.files?.[0],box=document.getElementById('receiptPreview');if(!box)return;if(!f){box.textContent='Pulsa “Tomar foto del ticket” para hacer una foto con el móvil.';return}box.innerHTML='<b>📷 Foto preparada:</b> '+esc(f.name)+'<br><span class="small">La imagen queda preparada para revisión. No se ha enviado a ningún servidor.</span>'}
+function collectDriverForm(){
+  const kmStart=num('kmStart'),kmEnd=num('kmEnd');
+  return {driver:document.getElementById('driverName').value.trim(),truck:document.getElementById('driverTruck').value,route:document.getElementById('driverRoute').value,date:document.getElementById('driverDate').value,kmStart,kmEnd,km:kmEnd&&kmStart?kmEnd-kmStart:0,fuelLiters:num('fuelLiters'),fuelAmount:num('fuelAmount'),fuelStation:document.getElementById('fuelStation').value.trim(),tolls:num('tollAmount'),parking:num('parkingAmount'),repairs:num('repairAmount'),other:num('otherAmount'),notes:document.getElementById('driverNotes').value.trim(),receipt:document.getElementById('receiptFile').files?.[0]?.name||''};
+}
+function reviewDriverEntry(){
+ const x=collectDriverForm(); if(x.kmEnd&&x.kmStart&&x.kmEnd<x.kmStart){alert('Revisa el kilometraje: el km final no puede ser inferior al inicial.');return}
+ driverPending=x; const total=x.fuelAmount+x.tolls+x.parking+x.repairs+x.other;
+ document.getElementById('driverReview').innerHTML='<div class="driver-summary"><div><b>Camión</b><br>'+esc(x.truck)+'</div><div><b>Ruta</b><br>'+esc(x.route)+'</div><div><b>Kilómetros</b><br>'+x.km.toLocaleString('es-ES')+' km</div><div><b>Gastos</b><br>'+total.toFixed(2).replace('.',',')+' €</div></div><p><b>Conductor:</b> '+esc(x.driver||'No indicado')+' · <b>Fecha:</b> '+esc(x.date||'No indicada')+'</p><p><b>Combustible:</b> '+x.fuelLiters.toLocaleString('es-ES')+' L · '+x.fuelAmount.toFixed(2).replace('.',',')+' €'+(x.fuelStation?' · '+esc(x.fuelStation):'')+'</p><p><b>Otros:</b> Peajes '+x.tolls.toFixed(2).replace('.',',')+' € · Parking '+x.parking.toFixed(2).replace('.',',')+' € · Reparaciones '+x.repairs.toFixed(2).replace('.',',')+' € · Otros '+x.other.toFixed(2).replace('.',',')+' €</p><p><b>Ticket:</b> '+esc(x.receipt||'No adjunto')+'</p><div class="note">Revisa estos datos. Nada se guardará hasta que pulses “Confirmar y guardar”.</div>';
+ document.getElementById('confirmDriverBtn').disabled=false;
+}
+function confirmDriverEntry(){if(!driverPending){alert('Primero revisa la jornada.');return}const list=driverEntries();list.unshift({...driverPending,confirmedAt:new Date().toISOString()});saveDriverEntries(list);driverPending=null;document.getElementById('confirmDriverBtn').disabled=true;document.getElementById('driverReview').innerHTML='<div class="info"><b>Registro confirmado.</b> AGAIDAN lo ha guardado localmente para que el dueño pueda consultarlo.</div>';renderDriverEntries();renderDriverFinance();renderFinanceKpis();renderOwnerOperationalFinance();renderHome();resetDriverExpenseFields();}
+function resetDriverExpenseFields(){['kmStart','kmEnd','fuelLiters','fuelAmount','fuelStation','tollAmount','parkingAmount','repairAmount','otherAmount','driverNotes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id.includes('Amount')?'0':''});const f=document.getElementById('receiptFile');if(f)f.value='';const r=document.getElementById('receiptPreview');if(r)r.textContent='Pulsa “Tomar foto del ticket” para hacer una foto con el móvil.';updateKmPreview()}
+function getAssignedDriverForTruck(truck){const trucks=getTruckConfig();const t=trucks.find(x=>x.name===truck);return t&&t.driver?t.driver.trim():''}
+function getCurrentDriverContext(){const truck=(document.getElementById('driverTruck')?.value||'').trim();const driver=(document.getElementById('driverName')?.value||'').trim();const route=(document.getElementById('driverRoute')?.value||'').trim();return {truck,driver,route}}
+function getCurrentDriverEntries(){const ctx=getCurrentDriverContext();if(!ctx.truck&&!ctx.driver)return [];return driverEntries().filter(x=>{const sameTruck=ctx.truck&&x.truck===ctx.truck;const recordedDriver=(x.driver||'').trim();const sameDriver=ctx.driver&&recordedDriver===ctx.driver;const legacyUnassigned=sameTruck&&!recordedDriver;return sameDriver||legacyUnassigned})}
+function renderDriverEntries(){const list=getCurrentDriverEntries(),box=document.getElementById('driverEntries');if(!box)return;if(!list.length){box.innerHTML='<div class="empty">Todavía no has confirmado ninguna jornada con tu camión.</div>';return}const x=list[0];const assigned=getAssignedDriverForTruck(x.truck);const displayDriver=x.driver||assigned;const total=(Number(x.fuelAmount)||0)+(Number(x.tolls)||0)+(Number(x.parking)||0)+(Number(x.repairs)||0)+(Number(x.other)||0);box.innerHTML='<div class="driver-entry"><b>'+esc(x.truck)+' · '+esc(x.route)+' · '+esc(x.date||'sin fecha')+'</b><span class="muted">'+esc(displayDriver||'Conductor no indicado')+' · '+(Number(x.km)||0).toLocaleString('es-ES')+' km · gastos '+total.toFixed(2).replace('.',',')+' €</span><span class="small">Este es tu último registro confirmado.</span></div>'}
+function renderDriverFinance(){
+  // Esta sección está dentro de Finanzas: el dueño debe ver y sumar TODOS los registros confirmados.
+  const allEntries=driverEntries();
+  const sum=allEntries.reduce((a,x)=>{a.km+=Number(x.km)||0;a.fuel+=Number(x.fuelAmount)||0;a.exp+=(Number(x.tolls)||0)+(Number(x.parking)||0)+(Number(x.repairs)||0)+(Number(x.other)||0);return a},{km:0,fuel:0,exp:0});
+  const box=document.getElementById('driverFinanceSummary');
+  if(box)box.innerHTML='<div><b>Km registrados</b><br>'+sum.km.toLocaleString('es-ES')+'</div><div><b>Combustible</b><br>'+sum.fuel.toFixed(2).replace('.',',')+' €</div><div><b>Otros gastos</b><br>'+sum.exp.toFixed(2).replace('.',',')+' €</div><div><b>Gasto total local</b><br>'+((sum.fuel+sum.exp).toFixed(2).replace('.',','))+' €</div>';
+  const listBox=document.getElementById('driverFinanceList');
+  if(listBox)listBox.innerHTML=allEntries.length?allEntries.slice(0,8).map(x=>{const assigned=getAssignedDriverForTruck(x.truck);const displayDriver=x.driver||assigned;const total=(Number(x.fuelAmount)||0)+(Number(x.tolls)||0)+(Number(x.parking)||0)+(Number(x.repairs)||0)+(Number(x.other)||0);return '<div class="follow"><b>🚚 '+esc(x.truck)+' · '+esc(x.route)+'</b><br><span class="muted">👤 '+esc(displayDriver||'Conductor no indicado')+' · '+esc(x.date||'sin fecha')+' · '+(Number(x.km)||0).toLocaleString('es-ES')+' km · '+total.toFixed(2).replace('.',',')+' € de gastos</span></div>'}).join(''):'<div class="empty">Todavía no hay gastos registrados por conductores.</div>';
+  const live=document.getElementById('ownerDriverLive'),count=document.getElementById('ownerDriverCount');
+  if(count)count.textContent=allEntries.length;
+  if(live){
+    if(!allEntries.length){live.innerHTML='<div class="empty">Todavía no hay registros confirmados desde AGAIDAN Conductor. Cuando un conductor confirme una jornada, aparecerá aquí automáticamente.</div>';}
+    else{
+      live.innerHTML=allEntries.slice(0,8).map((x,i)=>{const assigned=getAssignedDriverForTruck(x.truck);const displayDriver=x.driver||assigned;const total=(Number(x.fuelAmount)||0)+(Number(x.tolls)||0)+(Number(x.parking)||0)+(Number(x.repairs)||0)+(Number(x.other)||0);return '<div class="follow" style="margin-bottom:8px"><b>🚚 '+esc(x.truck)+' · '+esc(x.route)+'</b><br><span class="muted">👤 '+esc(displayDriver||'Conductor no indicado')+' · 📅 '+esc(x.date||'sin fecha')+' · 📏 '+(Number(x.km)||0).toLocaleString('es-ES')+' km · 💶 '+total.toFixed(2).replace('.',',')+' € de gastos</span>'+(x.fuelAmount?' <br><span class="small">⛽ Combustible: '+Number(x.fuelAmount).toFixed(2).replace('.',',')+' €</span>':'')+'</div>'}).join('')+'<div class="note">Estos registros proceden de las confirmaciones hechas en AGAIDAN Conductor en este mismo dispositivo. El dueño puede ver el historial completo; cada conductor solo ve sus propios registros.</div>';
+    }
+  }
+}
+
+function moneyLocal(n){return Number(n||0).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
+function getFinanceEntries(){return driverEntries()}
+function agaImportedValue(row, names){const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');for(const k of names){const want=norm(k);for(const key of Object.keys(row||{})){if(norm(key)===want)return row[key]}}return ''}
+function agaImportedNumber(v){if(typeof v==='number')return Number.isFinite(v)?v:0;let s=String(v??'').trim().replace(/[^0-9,.-]/g,'');if(s.includes(',')&&s.includes('.'))s=s.lastIndexOf(',')>s.lastIndexOf('.')?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'');else s=s.replace(',','.');const n=Number(s);return Number.isFinite(n)?n:0}
+function agaNormalizeImportedSale(row,source){const client=String(agaImportedValue(row,['cliente','nombre cliente','nombre','empresa','negocio'])||'').trim(),boxes=agaImportedNumber(agaImportedValue(row,['cajas','caja','boxes'])),price=agaImportedNumber(agaImportedValue(row,['precio caja','precio por caja','precio/caja','priceperbox'])),amount=agaImportedNumber(agaImportedValue(row,['importe','importe venta','venta','total','amount','facturacion']))||(boxes*price);return {...row,client,amount,boxes,pricePerBox:price,date:String(agaImportedValue(row,['fecha','date'])||''),truck:String(agaImportedValue(row,['camion','truck'])||''),route:String(agaImportedValue(row,['ruta','route'])||''),product:String(agaImportedValue(row,['producto','variedad','articulo'])||''),source:source||'imported'}}
+function salesEntries(){let own=[];try{own=JSON.parse(agaStorage.getItem('agaidan-sales')||'[]')}catch(e){};const imported=[];for(const kind of ['ventas','albaranes']){try{imported.push(...JSON.parse(agaStorage.getItem('agaidan-imported-'+kind)||'[]').map(r=>agaNormalizeImportedSale(r,kind==='albaranes'?'albarán importado':'venta importada')))}catch(e){}}return own.concat(imported)}
+function saveSalesEntries(list){agaStorage.setItem('agaidan-sales',JSON.stringify(list))}
+function collectionEntries(){let own=[];try{own=JSON.parse(agaStorage.getItem('agaidan-collections')||'[]')}catch(e){};let imported=[];try{imported=JSON.parse(agaStorage.getItem('agaidan-imported-cobros')||'[]').map(r=>({...r,client:String(agaImportedValue(r,['cliente','nombre cliente','nombre','empresa'])||'').trim(),amount:agaImportedNumber(agaImportedValue(r,['importe','cobro','pago','total','amount'])),date:String(agaImportedValue(r,['fecha','date'])||''),truck:String(agaImportedValue(r,['camion','truck'])||''),route:String(agaImportedValue(r,['ruta','route'])||''),source:'cobro importado'}))}catch(e){}return own.concat(imported)}
+function saveCollectionEntries(list){agaStorage.setItem('agaidan-collections',JSON.stringify(list))}
+function todayISO(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function populateSaleTrucks(){
+  const trucks=getTruckConfig();
+  const sale=document.getElementById('saleTruck'), col=document.getElementById('collectionTruck');
+  [sale,col].forEach(sel=>{if(!sel)return;const current=sel.value;sel.innerHTML='<option value="">Sin asignar</option>'+trucks.map(t=>'<option value="'+escAttr(t.name)+'">'+esc(t.name)+'</option>').join('');if(current)sel.value=current;});
+}
+function saleBoxesValue(){return Math.max(0,parseInt(document.getElementById('saleBoxes')?.value||'0',10)||0)}
+function salePriceValue(){return Math.max(0,Number(document.getElementById('salePricePerBox')?.value)||0)}
+function updateSaleTotalPreview(){const box=document.getElementById('saleTotalPreview');if(box)box.textContent='Total: '+moneyLocal(saleBoxesValue()*salePriceValue())+' · '+saleBoxesValue()+' caja(s)'}
+function addDeliveryItem(item={}){const box=document.getElementById('deliveryItems');if(!box)return;const row=document.createElement('div');row.className='delivery-item';row.style='display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end;margin:8px 0';row.innerHTML='<label>Variedad<input class="di-product" value="'+escAttr(item.product||'')+'" placeholder="Baguette, rústica..."></label><label>Cajas<input class="di-boxes" type="number" min="1" step="1" value="'+(item.boxes||1)+'"></label><label>Precio/caja (€)<input class="di-price" type="number" min="0" step="0.01" value="'+(item.pricePerBox??'')+'"></label><button type="button" class="button secondary" onclick="this.closest(\'.delivery-item\').remove();updateDeliveryItemsTotal()">✕</button>';box.appendChild(row);row.querySelectorAll('input').forEach(el=>el.addEventListener('input',updateDeliveryItemsTotal));updateDeliveryItemsTotal()}
+function getDeliveryItems(){return [...document.querySelectorAll('#deliveryItems .delivery-item')].map(r=>({product:r.querySelector('.di-product')?.value.trim()||'',boxes:Math.max(0,parseInt(r.querySelector('.di-boxes')?.value||'0',10)||0),pricePerBox:Math.max(0,Number(r.querySelector('.di-price')?.value)||0)})).filter(x=>x.product&&x.boxes>0)}
+function updateDeliveryItemsTotal(){const items=getDeliveryItems();const boxes=items.reduce((a,x)=>a+x.boxes,0),total=items.reduce((a,x)=>a+x.boxes*x.pricePerBox,0);const el=document.getElementById('deliveryItemsTotal');if(el)el.textContent='Total: '+moneyLocal(total)+' · '+boxes+' caja(s)'}
+function initDeliveryItems(){const b=document.getElementById('deliveryItems');if(b&&!b.children.length)addDeliveryItem()}
+function saveSale(){
+  const client=document.getElementById('saleClient').value.trim(),boxes=saleBoxesValue(),pricePerBox=salePriceValue(),date=document.getElementById('saleDate').value||todayISO(),truck=document.getElementById('saleTruck').value,route=document.getElementById('saleRoute').value.trim(),product=document.getElementById('saleProduct').value.trim();
+  const amount=boxes*pricePerBox;
+  if(!client||!product||boxes<=0||pricePerBox<=0){alert('Indica cliente, variedad, cajas y precio por caja.');return}
+  const list=salesEntries();list.unshift({id:Date.now(),client,amount,date,truck,route,product,boxes,pricePerBox,source:'venta'});saveSalesEntries(list);renderSales();renderFinanceKpis();renderFinanceDetails();renderOwnerOperationalFinance();renderProductsReal();renderHome();alert('Venta registrada: '+boxes+' caja(s) de '+product+'.');
+}
+function saveCollection(){
+  const client=document.getElementById('collectionClient').value.trim(),amount=Number(document.getElementById('collectionAmount').value)||0,date=document.getElementById('collectionDate').value||todayISO(),truck=document.getElementById('collectionTruck').value,route=document.getElementById('collectionRoute').value.trim();
+  if(!client||amount<=0){alert('Indica cliente e importe del cobro.');return}
+  const list=collectionEntries();list.unshift({id:Date.now(),client,amount,date,truck,route});saveCollectionEntries(list);
+  ['collectionClient','collectionAmount','collectionRoute'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  renderCollections();renderFinanceKpis();renderFinanceDetails();renderOwnerOperationalFinance();renderRealClients();renderHome();alert('Cobro registrado localmente.');
+}
+function renderSales(){const box=document.getElementById('salesList');if(!box)return;const list=salesEntries();box.innerHTML=list.length?list.slice(0,20).map(x=>'<div class="follow"><b>💶 '+esc(x.client)+'</b><br><span class="muted">'+esc(x.date)+' · '+(x.boxes?esc(String(x.boxes))+' caja(s) · ':'')+moneyLocal(x.amount)+(x.product?' · '+esc(x.product):'')+(x.pricePerBox?' · '+moneyLocal(x.pricePerBox)+'/caja':'')+(x.truck?' · '+esc(x.truck):'')+(x.route?' · '+esc(x.route):'')+'</span></div>').join(''):'<div class="empty">Todavía no hay ventas registradas.</div>'}
+function renderCollections(){const box=document.getElementById('collectionList');if(!box)return;const list=collectionEntries();box.innerHTML=list.length?list.slice(0,20).map(x=>'<div class="follow"><b>💳 '+esc(x.client)+'</b><br><span class="muted">'+esc(x.date)+' · '+moneyLocal(x.amount)+(x.truck?' · '+esc(x.truck):'')+(x.route?' · '+esc(x.route):'')+'</span></div>').join(''):'<div class="empty">Todavía no hay cobros registrados.</div>'}
+function financeTotals(){const sales=salesEntries(),collections=collectionEntries(),entries=driverEntries();const salesTotal=sales.reduce((a,x)=>a+(Number(x.amount)||0),0),colTotal=collections.reduce((a,x)=>a+(Number(x.amount)||0),0),expenseTotal=entries.reduce((a,x)=>a+(Number(x.fuelAmount)||0)+(Number(x.tolls)||0)+(Number(x.parking)||0)+(Number(x.repairs)||0)+(Number(x.other)||0),0);return {salesTotal,colTotal,expenseTotal,pending:Math.max(0,salesTotal-colTotal),margin:salesTotal-expenseTotal,hasReal:sales.length>0||collections.length>0||entries.length>0}}
+function renderFinanceKpis(){const box=document.getElementById('financeKpis');if(!box)return;const t=financeTotals();if(!t.hasReal){box.innerHTML='<div class="card metric"><div class="metric-label">Ventas</div><div class="metric-value">Sin datos</div></div><div class="card metric"><div class="metric-label">Gastos registrados</div><div class="metric-value">Sin datos</div></div><div class="card metric"><div class="metric-label">Margen</div><div class="metric-value">No calculable</div></div><div class="card metric"><div class="metric-label">Cobros pendientes registrados</div><div class="metric-value">Sin datos</div></div><div class="note" style="grid-column:1/-1">No hay actividad financiera registrada todavía. AGAIDAN no muestra cifras de ejemplo en este resumen.</div>';return}box.innerHTML='<div class="card metric"><div class="metric-label">Ventas</div><div class="metric-value">'+moneyLocal(t.salesTotal)+'</div></div><div class="card metric"><div class="metric-label">Cobros registrados</div><div class="metric-value">'+moneyLocal(t.colTotal)+'</div></div><div class="card metric"><div class="metric-label">Gastos registrados</div><div class="metric-value">'+moneyLocal(t.expenseTotal)+'</div></div><div class="card metric"><div class="metric-label">Ganancia calculada</div><div class="metric-value">'+moneyLocal(t.margin)+'</div></div><div class="card metric"><div class="metric-label">Pendiente de cobro</div><div class="metric-value">'+moneyLocal(t.pending)+'</div></div><div class="note" style="grid-column:1/-1">El pendiente se calcula como ventas registradas menos cobros registrados. Si no hay cobros registrados, no significa que AGAIDAN haya verificado una deuda real.</div>'}
+function renderFinanceDetails(){const sb=document.getElementById('financeSalesDetail'),cb=document.getElementById('financeCollectionsDetail');if(sb){const a=salesEntries();sb.innerHTML=a.length?a.slice(0,8).map(x=>'<div class=\"follow\"><b>'+esc(x.client)+'</b><br><span class=\"muted\">'+esc(x.date||'sin fecha')+' · '+(x.boxes||0)+' caja(s) · '+moneyLocal(x.amount)+'</span></div>').join(''):'<div class=\"empty\">No hay ventas registradas.</div>'}if(cb){const a=collectionEntries();cb.innerHTML=a.length?a.slice(0,8).map(x=>'<div class=\"follow\"><b>'+esc(x.client)+'</b><br><span class=\"muted\">'+esc(x.date||'sin fecha')+' · '+moneyLocal(x.amount)+'</span></div>').join(''):'<div class=\"empty\">No hay cobros registrados.</div>'}}
+function renderOwnerOperationalFinance(){
+  const entries=driverEntries(), sales=salesEntries(), collections=collectionEntries();
+  const byTruck={}, byRoute={};
+  let configured=[]; try{configured=getTruckConfig()||[]}catch(e){configured=[]}
+
+  function truckNumber(name){
+    const m=String(name||'').match(/(\d+)/); return m?m[1]:'';
+  }
+  const truckConfig={};
+  configured.forEach(t=>{
+    const name=String(t?.name||t?.truck||'').trim(); if(!name)return;
+    const raw=String(t?.route||t?.habitualRoute||'').trim();
+    const explicit=/^ruta\s*\d+/i.test(raw);
+    const n=truckNumber(name);
+    const canonical=explicit?raw:(n?'Ruta '+n:(raw||'Ruta no configurada'));
+    truckConfig[name]={route:canonical,zone:explicit?'':raw,driver:String(t?.driver||'').trim()};
+  });
+
+  function routeFor(x){return canonicalRouteForRecord(x)}
+  function ensureTruck(truck){
+    if(!byTruck[truck])byTruck[truck]={truck,routeSet:new Set(),km:0,expenses:0,sales:0,boxes:0,collections:0};
+    return byTruck[truck];
+  }
+  function ensureRoute(truck,route){
+    const key=truck+'||'+route;
+    if(!byRoute[key])byRoute[key]={truck,route,km:0,expenses:0,fuel:0,sales:0,boxes:0,collections:0};
+    return byRoute[key];
+  }
+
+  entries.forEach(x=>{
+    const truck=String(x?.truck||'Camión sin indicar').trim(), route=routeFor(x);
+    const expense=(Number(x?.fuelAmount)||0)+(Number(x?.tolls)||0)+(Number(x?.parking)||0)+(Number(x?.repairs)||0)+(Number(x?.other)||0);
+    const t=ensureTruck(truck);t.routeSet.add(route);t.km+=Number(x?.km)||0;t.expenses+=expense;
+    const r=ensureRoute(truck,route);r.km+=Number(x?.km)||0;r.expenses+=expense;r.fuel+=Number(x?.fuelAmount)||0;
+  });
+  sales.forEach(x=>{
+    const truck=String(x?.truck||'Camión sin asignar').trim(),route=routeFor(x);
+    const t=ensureTruck(truck);t.routeSet.add(route);t.sales+=Number(x?.amount)||0;t.boxes+=Number(x?.boxes)||0;
+    const r=ensureRoute(truck,route);r.sales+=Number(x?.amount)||0;r.boxes+=Number(x?.boxes)||0;
+  });
+  collections.forEach(x=>{
+    const truck=String(x?.truck||'Camión sin asignar').trim(),route=routeFor(x);
+    const t=ensureTruck(truck);t.routeSet.add(route);t.collections+=Number(x?.amount)||0;
+    const r=ensureRoute(truck,route);r.collections+=Number(x?.amount)||0;
+  });
+
+  const body=document.getElementById('truckFinanceBody'),filter=document.getElementById('truckFilter')?.value||'all';
+  if(body){
+    const names=[...new Set([...configured.map(t=>t?.name).filter(Boolean),...Object.keys(byTruck)])];
+    body.innerHTML=names.map(name=>{
+      if(filter!=='all'&&name!=='Camión '+filter)return '';
+      const d=byTruck[name]||{truck:name,routeSet:new Set(),km:0,expenses:0,sales:0,boxes:0,collections:0};
+      const route=[...d.routeSet].join(', ')||truckConfig[name]?.route||('Ruta '+(truckNumber(name)||'sin configurar'));
+      const hasSales=d.sales>0,hasExpense=d.expenses>0,hasKm=d.km>0,margin=hasSales?d.sales-d.expenses:null;
+      return '<tr><td>🚚 '+esc(name)+'</td><td>'+esc(route)+'</td><td>'+(d.boxes?d.boxes+' caja(s)':'Sin datos')+'</td><td>'+(hasSales?moneyLocal(d.sales):'Sin datos')+'</td><td>'+(hasExpense?moneyLocal(d.expenses):(hasKm?'0,00 €':'Sin registros'))+'</td><td>'+(hasKm?d.km.toLocaleString('es-ES'):'Sin registros')+'</td><td>'+(hasSales?moneyLocal(margin):'No calculable')+'</td></tr>';
+    }).join('')||'<tr><td colspan="7">Sin registros.</td></tr>';
+  }
+
+  const routeRows=Object.values(byRoute);
+  const truckSel=document.getElementById('financeRouteTruckFilter'),routeSel=document.getElementById('financeRouteFilter');
+  const selectedTruck=truckSel?.value||'',selectedRoute=routeSel?.value||'';
+  const truckOptions=[...new Set(routeRows.map(x=>x.truck))].sort(),routeOptions=[...new Set(routeRows.map(x=>x.route))].sort();
+  if(truckSel){truckSel.innerHTML='<option value="">Todos los camiones</option>'+truckOptions.map(x=>'<option value="'+escAttr(x)+'">'+esc(x)+'</option>').join('');if(truckOptions.includes(selectedTruck))truckSel.value=selectedTruck;}
+  if(routeSel){routeSel.innerHTML='<option value="">Todas las rutas</option>'+routeOptions.map(x=>'<option value="'+escAttr(x)+'">'+esc(x)+'</option>').join('');if(routeOptions.includes(selectedRoute))routeSel.value=selectedRoute;}
+
+  const filtered=routeRows.filter(x=>(!selectedTruck||x.truck===selectedTruck)&&(!selectedRoute||x.route===selectedRoute));
+  const routeBox=document.getElementById('routeFinanceBody');
+  if(routeBox)routeBox.innerHTML=filtered.length?filtered.map(d=>{
+    const hasSales=d.sales>0,hasExpense=d.expenses>0,margin=hasSales?d.sales-d.expenses:null,pending=Math.max(0,d.sales-d.collections);
+    return '<div class="mini-card"><strong>🛣️ '+esc(d.route)+' · 🚚 '+esc(d.truck)+'</strong><p>Cajas: <b>'+ (d.boxes||0) +' caja(s)</b></p><p>Ventas: <b>'+(hasSales?moneyLocal(d.sales):'Sin datos')+'</b></p><p>Gastos: <b>'+(hasExpense?moneyLocal(d.expenses):'Sin registros')+'</b></p><p>Margen: <b>'+(hasSales?moneyLocal(margin):'No calculable')+'</b></p><p>Km: <b>'+(d.km?d.km.toLocaleString('es-ES'):'Sin registros')+'</b></p><p>Combustible: <b>'+(d.fuel?moneyLocal(d.fuel):'Sin registros')+'</b></p><p>Pendiente de cobro: <b>'+(hasSales?moneyLocal(pending):'Sin datos')+'</b></p></div>';
+  }).join(''):'<div class="note">No hay datos para la selección actual.</div>';
+
+  const rt=document.getElementById('routeFinanceTotals');
+  if(rt){const ss=filtered.reduce((a,x)=>a+x.sales,0),ee=filtered.reduce((a,x)=>a+x.expenses,0),ff=filtered.reduce((a,x)=>a+x.fuel,0),kk=filtered.reduce((a,x)=>a+x.km,0);rt.innerHTML='<strong>Selección:</strong> '+filtered.length+' ruta(s) · Ventas '+moneyLocal(ss)+' · Gastos '+moneyLocal(ee)+' · Combustible '+moneyLocal(ff)+' · Margen '+moneyLocal(ss-ee)+' · '+kk.toLocaleString('es-ES')+' km';}
+}
+function deliveryNoteEntries(){try{return JSON.parse(agaStorage.getItem('agaidan-delivery-notes')||'[]')}catch(e){return []}}
+function saveDeliveryNoteEntries(list){agaStorage.setItem('agaidan-delivery-notes',JSON.stringify(list))}
+function populateDeliveryNoteRoutes(){
+  const sel=document.getElementById('deliveryNoteRoute');if(!sel)return;
+  let cfg=[];try{cfg=getTruckConfig()||[]}catch(e){}
+  const routes=[...new Set(cfg.map(t=>{
+    const raw=String(t?.route||t?.habitualRoute||'').trim();
+    const n=(String(t?.name||t?.truck||'').match(/(\d+)/)||[])[1];
+    return /^ruta\s*\d+/i.test(raw)?raw:('Ruta '+(n||'sin configurar'));
+  }).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Selecciona una ruta</option>'+routes.map(r=>'<option value="'+escAttr(r)+'">'+esc(r)+'</option>').join('');
+}
+function populateDeliveryNoteTrucks(){const sel=document.getElementById('deliveryNoteTruck');if(!sel)return;const current=sel.value;const trucks=getTruckConfig();sel.innerHTML='<option value="">Sin asignar</option>'+trucks.map(t=>'<option value="'+escAttr(t.name)+'">'+esc(t.name)+'</option>').join('');if(current)sel.value=current}
+function reviewDeliveryNote(){
+  const items=getDeliveryItems();const client=document.getElementById('deliveryNoteClient').value.trim(),number=document.getElementById('deliveryNoteNumber').value.trim(),date=document.getElementById('deliveryNoteDate').value||todayISO(),truck=document.getElementById('deliveryNoteTruck').value,route=document.getElementById('deliveryNoteRoute').value,payment=document.getElementById('deliveryNotePayment')?.value||'efectivo';
+  const amount=items.reduce((a,x)=>a+x.boxes*x.pricePerBox,0),boxes=items.reduce((a,x)=>a+x.boxes,0);
+  const box=document.getElementById('deliveryNoteReview');if(!client||!number||!items.length||amount<=0){box.innerHTML='<div class="note">Indica cliente, número de albarán y al menos una variedad con cajas y precio por caja.</div>';return}
+  const exists=deliveryNoteEntries().find(x=>String(x.number)===number);window.pendingDeliveryNote={client,number,date,amount,items,boxes,product:items.map(x=>x.product).join(' · '),truck,route,payment};
+  box.innerHTML='<div class="panel"><h3>Revisión del albarán</h3><p><b>Cliente:</b> '+esc(client)+'</p><p><b>Nº:</b> '+esc(number)+'</p><p><b>Fecha:</b> '+esc(date)+'</p><p><b>Total:</b> '+moneyLocal(amount)+' · <b>Cajas:</b> '+boxes+'</p>'+items.map(x=>'<p>📦 '+x.boxes+' caja(s) · '+esc(x.product)+' · '+moneyLocal(x.pricePerBox)+' / caja = <b>'+moneyLocal(x.boxes*x.pricePerBox)+'</b></p>').join('')+'<p><b>Camión:</b> '+esc(truck||'Sin asignar')+' · <b>Ruta:</b> '+esc(route||'Sin indicar')+' · <b>Cobro:</b> '+esc(deliveryPaymentLabel(payment))+'</p>'+(exists?'<div class="note">Este número de albarán ya existe. No se creará una venta duplicada.</div>':'')+'<button type="button" class="button green" id="confirmDeliveryNoteBtn" '+(exists?'disabled':'')+'>✅ Confirmar y guardar</button></div>';
+  document.getElementById('confirmDeliveryNoteBtn')?.addEventListener('click',confirmDeliveryNote);
+}
+function confirmDeliveryNote(){
+  const data=window.pendingDeliveryNote;if(!data||!data.client||!data.number||!data.items?.length){alert('Completa y revisa el albarán antes de guardar.');return}
+  const notes=deliveryNoteEntries();if(notes.some(x=>String(x.number)===String(data.number))){alert('Ese número de albarán ya existe.');return}
+  const note={id:Date.now(),...data,status:'confirmed',confirmedAt:new Date().toISOString()};notes.unshift(note);saveDeliveryNoteEntries(notes);
+  const sales=salesEntries();sales.unshift({id:Date.now()+1,client:data.client,amount:data.amount,date:data.date,truck:data.truck,route:data.route,product:data.product,boxes:data.boxes,items:data.items,source:'albarán',deliveryNoteId:note.id,deliveryNoteNumber:data.number});saveSalesEntries(sales);
+  window.pendingDeliveryNote=null;document.getElementById('deliveryNoteReview').innerHTML='<div class="note">✅ Albarán confirmado. Venta asociada: '+data.boxes+' caja(s) · '+moneyLocal(data.amount)+'.</div>';renderDeliveryNotes();renderSales();renderFinanceKpis();renderFinanceDetails();renderOwnerOperationalFinance();renderProductsReal();renderRealClients();renderHome();alert('Albarán confirmado y venta asociada registrada.');
+}
+function deliveryPaymentLabel(p){return ({efectivo:'Efectivo',tarjeta:'Tarjeta',transferencia:'Transferencia',pendiente:'Pendiente'})[p]||'Efectivo'}
+function renderDeliveryNoteSummary(){
+  const box=document.getElementById('deliveryNoteSummary');if(!box)return;
+  const list=deliveryNoteEntries().filter(x=>x.status==='confirmed');
+  const trucks=[...new Set(list.map(x=>String(x.truck||'').trim()).filter(Boolean))].sort();
+  const routes=[...new Set(list.map(x=>canonicalDeliveryRoute(x)).filter(Boolean))].sort();
+  const dates=[...new Set(list.map(x=>String(x.date||'').trim()).filter(Boolean))].sort().reverse();
+  let truckSel=String(window.deliverySummaryTruck||'').trim();
+  let routeSel=String(window.deliverySummaryRoute||'').trim();
+  let dateSel=String(window.deliverySummaryDate||'').trim();
+  if(truckSel && !trucks.includes(truckSel))truckSel='';
+  if(routeSel && !routes.includes(routeSel))routeSel='';
+  if(dateSel && !dates.includes(dateSel))dateSel='';
+  window.deliverySummaryTruck=truckSel;window.deliverySummaryRoute=routeSel;window.deliverySummaryDate=dateSel;
+  const filtered=list.filter(x=>{
+    const truck=String(x.truck||'').trim();
+    const route=canonicalDeliveryRoute(x);
+    const date=String(x.date||'').trim();
+    return (!truckSel||truck===truckSel)&&(!routeSel||route===routeSel)&&(!dateSel||date===dateSel);
+  });
+  const total=filtered.reduce((a,x)=>a+(Number(x.amount)||0),0);
+  const knownBoxRows=filtered.filter(x=>Number.isFinite(Number(x.boxes)) && Number(x.boxes)>0);
+  const totalBoxes=knownBoxRows.reduce((a,x)=>a+(Number(x.boxes)||0),0);
+  const unknownBoxes=filtered.length-knownBoxRows.length;
+  const cash=filtered.filter(x=>String(x.payment||'efectivo').trim().toLowerCase()==='efectivo').reduce((a,x)=>a+(Number(x.amount)||0),0);
+  const pending=filtered.filter(x=>String(x.payment||'').trim().toLowerCase()==='pendiente').reduce((a,x)=>a+(Number(x.amount)||0),0);
+  const groups={};
+  filtered.forEach(x=>{
+    const truck=x.truck||'Sin asignar',route=canonicalDeliveryRoute(x)||'Sin indicar',key=truck+' · '+route;
+    if(!groups[key])groups[key]={truck,route,count:0,sales:0,cash:0,card:0,transfer:0,pending:0,boxes:0,unknownBoxes:0};
+    groups[key].count++;groups[key].sales+=Number(x.amount)||0;
+    if(Number.isFinite(Number(x.boxes))&&Number(x.boxes)>0)groups[key].boxes+=Number(x.boxes)||0;else groups[key].unknownBoxes++;
+    const payment=String(x.payment||'efectivo').trim().toLowerCase();
+    const bucket=payment==='efectivo'?'cash':payment==='tarjeta'?'card':payment==='transferencia'?'transfer':payment==='pendiente'?'pending':'cash';
+    groups[key][bucket]=(groups[key][bucket]||0)+(Number(x.amount)||0);
+  });
+  const cards=Object.values(groups).map(g=>{
+    const boxText=g.unknownBoxes?g.boxes+' caja(s) conocidas · '+g.unknownBoxes+' sin dato':g.boxes+' caja(s)';
+    return '<div class="card" style="margin-top:10px"><h4>🚚 '+esc(g.truck)+' · 🛣️ '+esc(g.route)+'</h4><div class="muted">Albaranes: '+g.count+' · Cajas: '+boxText+' · Ventas: '+moneyLocal(g.sales)+'</div><div style="margin-top:10px;font-size:1.05em"><b>💵 TOTAL A ENTREGAR: '+moneyLocal(g.cash)+'</b></div><div class="muted" style="margin-top:6px">Tarjeta: '+moneyLocal(g.card)+' · Transferencia: '+moneyLocal(g.transfer)+' · Pendiente: '+moneyLocal(g.pending)+'</div><button type="button" class="button secondary" style="margin-top:10px" onclick="openSettlementRoute(\''+escAttr(g.truck)+'\',\''+escAttr(g.route)+'\')">📄 Ver albaranes de esta ruta</button></div>';
+  }).join('');
+  const boxTotalText=filtered.length?(unknownBoxes?totalBoxes+' caja(s) conocidas · '+unknownBoxes+' sin dato':String(totalBoxes)):'0';
+  box.innerHTML='<h3>📊 LIQUIDACIÓN DE JORNADA</h3><p class="muted">Aquí puedes ver cuánto debe entregar el conductor por cada ruta según los albaranes confirmados.</p><div class="panel form" style="margin-top:12px"><label>📅 Fecha<select id="deliverySummaryDate"><option value="">Todas las fechas</option>'+dates.map(d=>'<option value="'+escAttr(d)+'"'+(dateSel===d?' selected':'')+'>'+esc(d)+'</option>').join('')+'</select></label><label>🚚 Camión<select id="deliverySummaryTruck"><option value="">Todos los camiones</option>'+trucks.map(t=>'<option value="'+escAttr(t)+'"'+(truckSel===t?' selected':'')+'>'+esc(t)+'</option>').join('')+'</select></label><label>🛣️ Ruta<select id="deliverySummaryRoute"><option value="">Todas las rutas</option>'+routes.map(r=>'<option value="'+escAttr(r)+'"'+(routeSel===r?' selected':'')+'>'+esc(r)+'</option>').join('')+'</select></label></div><div class="grid cards"><div class="card"><b>📄 TOTAL ALBARANES</b><div class="big">'+filtered.length+'</div></div><div class="card"><b>📦 TOTAL CAJAS</b><div class="big">'+boxTotalText+'</div></div><div class="card"><b>💶 TOTAL VENTAS</b><div class="big">'+moneyLocal(total)+'</div></div><div class="card"><b>💵 TOTAL A ENTREGAR</b><div class="big">'+moneyLocal(cash)+'</div></div><div class="card"><b>⏳ PENDIENTE</b><div class="big">'+moneyLocal(pending)+'</div></div></div><div class="note"><b>Importante:</b> solo el importe marcado como <b>Efectivo</b> entra en “Total a entregar”. Las cajas históricas que no tienen ese dato se muestran como “sin dato”; AGAIDAN no las inventa.</div><h3 style="margin-top:20px">🚚 TOTAL A ENTREGAR POR RUTA</h3>'+(cards||'<div class="empty">No hay albaranes para los filtros seleccionados.</div>');
+  const ts=document.getElementById('deliverySummaryTruck'),rs=document.getElementById('deliverySummaryRoute'),ds=document.getElementById('deliverySummaryDate');
+  if(ts)ts.onchange=()=>{window.deliverySummaryTruck=ts.value;renderDeliveryNoteSummary();renderDeliveryNotes()};
+  if(rs)rs.onchange=()=>{window.deliverySummaryRoute=rs.value;renderDeliveryNoteSummary();renderDeliveryNotes()};
+  if(ds)ds.onchange=()=>{window.deliverySummaryDate=ds.value;renderDeliveryNoteSummary();renderDeliveryNotes()};
+}
+
+function openSettlementRoute(truck,route){
+  window.modalReturnToSettlement=null;
+  const list=deliveryNoteEntries().filter(x=>(!truck||String(x.truck||'').trim()===String(truck))&&canonicalDeliveryRoute(x)===String(route));
+  const rows=list.length?list.map(x=>'<div class="follow"><button type="button" style="border:0;background:none;padding:0;color:var(--accent,#2563eb);font:inherit;font-weight:700;cursor:pointer;text-align:left" onclick="openDeliveryNoteDetail('+Number(x.id)+',true,\''+escAttr(truck)+'\',\''+escAttr(route)+'\')">📄 '+esc(x.number||'Sin número')+' · '+esc(x.client||'Sin cliente')+'</button><br><span class="muted">'+esc(x.date||'—')+' · '+moneyLocal(x.amount)+' · '+esc(deliveryPaymentLabel(x.payment))+'</span></div>').join(''):'<div class="empty">No hay albaranes para esta ruta.</div>';
+  document.getElementById('modalContent').innerHTML='<div class="modal-head"><div><h2 style="margin:0">📄 Albaranes de la ruta</h2><p class="muted" style="margin:5px 0 0">'+esc(truck||'Sin camión')+' · '+esc(route||'Sin ruta')+'</p></div><button class="close" onclick="closeModal()">✕</button></div><div class="section">'+rows+'</div><div class="section"><button class="button secondary" onclick="closeModal()">Cerrar</button></div>';
+  document.getElementById('modalBack').style.display='flex';
+}
+function openDeliveryNoteDetail(id,returnToRoute){
+  if(returnToRoute)window.modalReturnToSettlement={truck:String(arguments.length>2?arguments[2]:'').trim(),route:String(arguments.length>3?arguments[3]:'').trim()};
+  const note=deliveryNoteEntries().find(x=>String(x.id)===String(id));
+  if(!note)return;
+  const sale=salesEntries().find(x=>String(x.deliveryNoteId)===String(note.id)||String(x.deliveryNoteNumber||'')===String(note.number||''));
+  const items=Array.isArray(note.items)&&note.items.length?note.items:(Array.isArray(sale?.items)&&sale.items.length?sale.items:null);
+  const boxesKnown=Number.isFinite(Number(note.boxes))&&Number(note.boxes)>0;
+  const route=canonicalDeliveryRoute(note)||'Sin indicar';
+  const payment=deliveryPaymentLabel(note.payment);
+  const includedCash=String(note.payment||'efectivo').toLowerCase()==='efectivo';
+  const detailHtml=items?'<table style="width:100%;border-collapse:collapse;margin-top:10px"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid #e5e7eb">Variedad</th><th style="text-align:right;padding:8px;border-bottom:1px solid #e5e7eb">Cajas</th><th style="text-align:right;padding:8px;border-bottom:1px solid #e5e7eb">Precio/caja</th><th style="text-align:right;padding:8px;border-bottom:1px solid #e5e7eb">Importe</th></tr></thead><tbody>'+items.map(it=>{const b=Number(it.boxes)||0,pp=Number(it.pricePerBox)||0;return '<tr><td style="padding:8px;border-bottom:1px solid #f1f5f9">'+esc(it.product||'Sin variedad')+'</td><td style="padding:8px;text-align:right;border-bottom:1px solid #f1f5f9">'+(b||'—')+'</td><td style="padding:8px;text-align:right;border-bottom:1px solid #f1f5f9">'+(pp?moneyLocal(pp):'—')+'</td><td style="padding:8px;text-align:right;border-bottom:1px solid #f1f5f9">'+(b&&pp?moneyLocal(b*pp):'—')+'</td></tr>'}).join('')+'</tbody></table>':'<div class="note" style="margin-top:10px">Detalle de productos: No disponible en el registro original.</div>';
+  const totalBoxes=boxesKnown?Number(note.boxes):null;
+  document.getElementById('modalContent').innerHTML='<div class="modal-head"><div><h2 style="margin:0">📄 Detalle del albarán</h2><p class="muted" style="margin:5px 0 0">'+esc(note.number||'Sin número')+' · '+esc(note.client||'Sin cliente')+'</p></div><button class="close" onclick="closeModal()">✕</button></div><div class="section"><div class="kpi"><span>Nº de albarán</span><b>'+esc(note.number||'—')+'</b></div><div class="kpi"><span>Cliente</span><b>'+esc(note.client||'—')+'</b></div><div class="kpi"><span>Fecha</span><b>'+esc(note.date||'—')+'</b></div><div class="kpi"><span>Camión</span><b>'+esc(note.truck||'Sin asignar')+'</b></div><div class="kpi"><span>Ruta</span><b>'+esc(route)+'</b></div><div class="kpi"><span>Forma de cobro</span><b>'+esc(payment)+'</b></div><div class="kpi"><span>Estado</span><b class="ok">'+(note.status==='confirmed'?'Confirmado':'Pendiente')+'</b></div></div><div class="section"><h3>📦 Detalle de productos</h3>'+detailHtml+'</div><div class="section"><h3>💶 Totales</h3><div class="kpi"><span>Total cajas</span><b>'+(totalBoxes===null?'—':totalBoxes)+'</b></div><div class="kpi"><span>Total €</span><b>'+moneyLocal(note.amount)+'</b></div></div><div class="section"><h3>🔗 Relación con la venta</h3><div class="kpi"><span>Venta asociada</span><b>'+(sale?'Sí':'No registrada')+'</b></div><div class="kpi"><span>Cobro</span><b>'+esc(payment)+'</b></div><div class="kpi"><span>Incluido en liquidación</span><b>'+(includedCash?'Sí · efectivo':'No · no es efectivo')+'</b></div></div><div class="section"><button class="button secondary" onclick="closeModal()">Cerrar</button></div>';
+  document.getElementById('modalBack').style.display='flex';
+}
+function renderDeliveryNotes(){
+  const box=document.getElementById('deliveryNoteList');if(!box)return;
+  const list=deliveryNoteEntries();
+  box.innerHTML=list.length?list.slice(0,30).map(x=>{const route=canonicalDeliveryRoute(x);return '<div class="follow"><button type="button" style="border:0;background:none;padding:0;color:var(--accent,#2563eb);font:inherit;font-weight:700;cursor:pointer;text-align:left" onclick="openDeliveryNoteDetail('+Number(x.id)+')">📄 '+esc(x.number)+' · '+esc(x.client)+'</button><br><span class="muted">'+esc(x.date)+' · '+(Number(x.boxes)>0?(x.boxes+' caja(s) · '):'')+moneyLocal(x.amount)+' · '+esc(x.truck||'Camión sin asignar')+' · '+esc(route)+' · '+esc(deliveryPaymentLabel(x.payment))+' · '+(x.status==='confirmed'?'Confirmado':'Pendiente')+'</span></div>'}).join(''):'<div class="empty">Todavía no hay albaranes guardados.</div>';
+  renderDeliveryNoteSummary();
+}
+
+function renderProductsReal(){const sales=salesEntries(),box=document.getElementById('realProductsList');if(!box)return;const g={};sales.forEach(x=>{const p=String(x.product||'').trim();if(p){if(!g[p])g[p]={amount:0,boxes:0,count:0,clients:new Set()};g[p].amount+=Number(x.amount)||0;g[p].boxes+=Number(x.boxes)||0;g[p].count++;if(x.client)g[p].clients.add(x.client)}});const rows=Object.entries(g).sort((a,b)=>b[1].boxes-a[1].boxes);box.innerHTML=rows.length?rows.map(([p,v])=>'<div class="follow"><b>📦 '+esc(p)+'</b><br><span class="muted">Cajas: '+v.boxes+' · Ventas: '+moneyLocal(v.amount)+' · Operaciones: '+v.count+' · Clientes: '+v.clients.size+'</span></div>').join(''):'<div class="empty">Todavía no hay ventas registradas con variedad y cajas. Añade las cajas al crear un albarán para empezar a ver este análisis.</div>'}
+function renderRealClients(){const box=document.getElementById('realClientsList');if(!box)return;const sales=salesEntries(),collections=collectionEntries(),names=[...new Set([...sales.map(x=>x.client),...collections.map(x=>x.client)])];box.innerHTML=names.length?names.map(name=>{const sv=sales.filter(x=>x.client===name).reduce((a,x)=>a+(Number(x.amount)||0),0),cv=collections.filter(x=>x.client===name).reduce((a,x)=>a+(Number(x.amount)||0),0);return '<div class="follow"><b>👤 '+esc(name)+'</b><br><span class="muted">Ventas: '+moneyLocal(sv)+' · Cobros: '+moneyLocal(cv)+' · Pendiente: '+moneyLocal(Math.max(0,sv-cv))+'</span></div>'}).join(''):'<div class="empty">Todavía no hay actividad financiera registrada por clientes.</div>'}
+function filterTruckFinance(){renderOwnerOperationalFinance()}
+document.addEventListener('DOMContentLoaded',()=>{setDriverDateToday();renderDriverEntries();renderDriverFinance();populateDeliveryNoteTrucks();populateDeliveryNoteRoutes();initDeliveryItems();const dn=document.getElementById('deliveryNoteDate');if(dn&&!dn.value)dn.value=todayISO();renderDeliveryNotes();renderSales();renderCollections();renderProductsReal();renderRealClients();renderFinanceKpis();renderFinanceDetails();renderOwnerOperationalFinance();['saleBoxes','salePricePerBox'].forEach(id=>document.getElementById(id)?.addEventListener('input',updateSaleTotalPreview));updateSaleTotalPreview();});
+</script>
+
+<section id="cobros" class="view"><h1>Cobros</h1><p class="muted">Registra los cobros reales del negocio. Se guardan localmente en este navegador.</p><div class="panel form"><label>Cliente<input id="collectionClient" placeholder="Ej. Restaurante Alameda"></label><label>Importe (€)<input id="collectionAmount" type="number" min="0" step="0.01" placeholder="0,00"></label><label>Fecha<input id="collectionDate" type="date"></label><label>Camión<select id="collectionTruck"><option value="">Sin asignar</option></select></label><label>Ruta<input id="collectionRoute" placeholder="Ej. Toledo Norte"></label><div class="full"><button class="button" onclick="saveCollection()">Registrar cobro</button></div></div><div class="card"><h3>📋 Cobros registrados</h3><div id="collectionList"></div></div></section>
+
+<section id="ventas" class="view"><h1>Ventas</h1><p class="muted">Registra las ventas reales del negocio. La unidad de trabajo es la <b>caja de pan</b>; cada caja puede corresponder a una variedad distinta.</p><div class="panel form"><label>Cliente<input id="saleClient" placeholder="Ej. Alimentación La Plaza"></label><label>Variedad<input id="saleProduct" placeholder="Ej. Baguette precocida"></label><label>Cajas<input id="saleBoxes" type="number" min="1" step="1" placeholder="Ej. 2"></label><label>Precio por caja (€)<input id="salePricePerBox" type="number" min="0" step="0.01" placeholder="0,00"></label><label>Fecha<input id="saleDate" type="date"></label><label>Camión<select id="saleTruck"><option value="">Sin asignar</option></select></label><label>Ruta<input id="saleRoute" placeholder="Ej. Ruta Toledo Norte"></label><div class="full"><div id="saleTotalPreview" class="note">Total: 0,00 € · 0 caja(s)</div><button class="button" onclick="saveSale()">Registrar venta</button></div></div><div class="card"><h3>📋 Ventas</h3><div id="salesList"></div></div></section>
+
+<section id="albaranes" class="view">
+<h1>📄 Albaranes</h1>
+<p class="muted">Área del dueño. Registra y confirma los albaranes entregados al final de la jornada. El conductor no introduce ventas.</p>
+<div class="note">Flujo: albarán recibido → revisar → confirmar → AGAIDAN crea la venta asociada. Un mismo albarán no puede generar dos ventas.</div><div class="note">La forma de cobro determina la liquidación: solo los albaranes marcados como <b>Efectivo</b> se suman al dinero que debe entregar el conductor.</div>
+<div class="panel form">
+<label>Cliente<input id="deliveryNoteClient" placeholder="Ej. Restaurante Alameda"></label>
+<label>Número de albarán<input id="deliveryNoteNumber" placeholder="Ej. ALB-2026-001"></label>
+<label>Fecha<input id="deliveryNoteDate" type="date"></label>
+<div class="full"><h3>📦 Variedades y cajas</h3><p class="small muted">Añade una línea por variedad. La cantidad siempre se registra en <b>cajas</b>.</p><div id="deliveryItems"></div><button type="button" class="button secondary" onclick="addDeliveryItem()">＋ Añadir variedad</button><div id="deliveryItemsTotal" class="note" style="margin-top:10px">Total: 0,00 € · Cajas: 0</div></div>
+<label>Camión<select id="deliveryNoteTruck"><option value="">Sin asignar</option></select></label>
+<label>🛣️ Ruta<select id="deliveryNoteRoute"><option value="">Selecciona una ruta</option></select></label><label>💳 Forma de cobro<select id="deliveryNotePayment"><option value="efectivo">Efectivo</option><option value="tarjeta">Tarjeta</option><option value="transferencia">Transferencia</option><option value="pendiente">Pendiente</option></select></label>
+<div class="full"><button class="button" onclick="reviewDeliveryNote()">🔎 Revisar albarán</button></div>
+</div>
+<div id="deliveryNoteReview" class="card"><div class="empty">Completa los datos y pulsa “Revisar albarán”.</div></div>
+<div id="deliveryNoteSummary" class="card" style="margin:16px 0;border:2px solid var(--accent,#2b6);"></div><div class="card"><h3>📋 Albaranes guardados</h3><div id="deliveryNoteList"></div></div>
+</section>
+
+<section id="productos" class="view"><h1>Productos</h1><p class="muted">Las variedades registradas en albaranes y ventas aparecen aquí automáticamente. La métrica principal es el número de cajas. Si una venta no tiene producto indicado, no se asigna a ningún producto.</p><div class="card"><h3>📊 Ventas reales por producto</h3><div id="realProductsList"></div></div><div class="note" style="margin-top:12px"><b>Oportunidad:</b> cuando haya suficientes datos reales, AGAIDAN podrá mostrar qué productos tienen más salida, qué clientes los compran y dónde puede existir una oportunidad de ampliar surtido. No se recomendará un producto sin datos suficientes.</div></section>
+
+<section id="dueno" class="view"><h1>Asistente IA</h1><p class="muted">El copiloto integral del dueño: negocio y clientes en un solo asistente.</p><div class="note"><b>Regla de AGAIDAN:</b> la IA propone. El dueño revisa. El dueño confirma. El sistema guarda.<br>Usa únicamente los datos registrados en AGAIDAN. Si faltan datos, lo indicará en lugar de inventarlos. No ejecuta acciones externas.</div><div class="card-actions" style="margin:12px 0;display:flex;flex-wrap:wrap;gap:8px"><button class="button secondary" onclick="ownerQuick('¿Cómo está mi negocio?')">📊 Estado del negocio</button><button class="button secondary" onclick="ownerQuick('¿A quién debería llamar hoy?')">📞 A quién llamar</button><button class="button secondary" onclick="ownerQuick('¿Qué clientes potenciales debería visitar primero?')">🔎 Visitas</button><button class="button secondary" onclick="ownerQuick('¿Qué oportunidades tengo?')">🎯 Oportunidades</button><button class="button secondary" onclick="ownerQuick('¿Qué debería revisar hoy?')">🔎 Qué revisar hoy</button><button class="button secondary" onclick="ownerQuick('¿Qué tengo pendiente de cobro?')">💳 Cobros</button><button class="button secondary" onclick="ownerQuick('¿Cómo van mis rutas?')">🛣️ Rutas</button><button class="button secondary" onclick="ownerQuick('¿Cómo van mis productos?')">📦 Productos</button><button class="button secondary" onclick="ownerQuick('¿Cuántas cajas he vendido?')">📦 Cajas vendidas</button><button class="button secondary" onclick="ownerQuick('¿Qué información me falta?')">ℹ️ Datos que faltan</button></div><div id="ownerChat" class="chat"><div class="msg">Soy tu copiloto integral. Puedo ayudarte con clientes, cajas, variedades, prospección, visitas, oportunidades, ventas, gastos, cobros, rutas, productos y seguimiento. Si falta información, te lo diré en lugar de inventarla.</div></div><div class="composer"><input id="ownerQuestion" placeholder="Ej.: ¿A quién debería llamar hoy?"><button class="button" onclick="askOwner()">Preguntar</button></div><div class="ai-chip-row"><button class="ai-chip" onclick="ownerQuick('¿Qué debería revisar hoy?')">🔎 ¿Qué debería revisar hoy?</button><button class="ai-chip" onclick="ownerQuick('¿Cuántas cajas he vendido?')">📦 ¿Cuántas cajas he vendido?</button><button class="ai-chip" onclick="ownerQuick('¿Qué variedad vendo más?')">🥖 ¿Qué variedad vendo más?</button><button class="ai-chip" onclick="ownerQuick('¿Cómo van mis rutas?')">🚚 ¿Cómo van mis rutas?</button><button class="ai-chip" onclick="ownerQuick('¿Qué información me falta?')">🧩 ¿Qué información me falta?</button></div></section>
+
+<section id="empresa" class="view"><h1>Mi negocio</h1><p class="muted">Configuración básica para personalizar el copiloto.</p><div class="panel form">
+<label>Nombre de empresa<input id="companyName" placeholder="Ej. Distribuciones Andrés"></label>
+<label>Nombre de marca<input id="tradeName" placeholder="Ej. PanDistribuciones"></label>
+<label>Zona de reparto<input id="deliveryZone" placeholder="Ej. Toledo y alrededores"></label>
+<label>Teléfono de empresa<input id="companyPhone" placeholder="Teléfono"></label>
+<label class="full">Descripción del negocio<textarea id="valueProp" placeholder="Qué vendes y a quién se lo vendes"></textarea><span class="small muted">Qué vendes, cómo repartes y a qué tipo de clientes atiendes.</span></label>
+<div class="full">
+<div class="business-profile-grid">
+<div class="business-profile-card">
+<h4>📦 Qué vendes</h4>
+<p class="helper">Selecciona los productos o categorías que distribuye tu negocio.</p>
+<div class="business-choice-grid">
+<label class="business-choice"><input class="business-product" type="checkbox" value="Pan precocido"><span>Pan precocido</span></label>
+<label class="business-choice"><input class="business-product" type="checkbox" value="Bollería"><span>Bollería</span></label>
+<label class="business-choice"><input class="business-product" type="checkbox" value="Otros productos"><span>Otros productos</span></label>
+</div></div>
+<div class="business-profile-card">
+<h4>👥 A quién vendes</h4>
+<p class="helper">Indica los tipos de clientes a los que atiende tu negocio.</p>
+<div class="business-choice-grid">
+<label class="business-choice"><input class="business-customer" type="checkbox" value="Restaurantes"><span>Restaurantes</span></label>
+<label class="business-choice"><input class="business-customer" type="checkbox" value="Bares"><span>Bares</span></label>
+<label class="business-choice"><input class="business-customer" type="checkbox" value="Cafeterías"><span>Cafeterías</span></label>
+<label class="business-choice"><input class="business-customer" type="checkbox" value="Hoteles"><span>Hoteles</span></label>
+<label class="business-choice"><input class="business-customer" type="checkbox" value="Tiendas"><span>Tiendas</span></label>
+<label class="business-choice"><input class="business-customer" type="checkbox" value="Otros clientes"><span>Otros</span></label>
+</div></div>
+</div></div>
+<div class="full">
+<h3 style="margin:8px 0 4px">🚚 Camiones</h3>
+<p class="muted">Configura cada camión y su relación con conductor y ruta. En esta demo los datos se guardan localmente en este navegador.</p>
+<label>Número de camiones<input id="truckCount" type="number" min="0" max="50" step="1" value="0" oninput="previewTrucks()" placeholder="Ej. 5"></label>
+<div id="truckPreview" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:10px"></div>
+<div id="truckConfigStatus" class="small muted" style="margin-top:10px"></div>
+</div>
+<div class="full"><button class="button" onclick="saveCompany()">Guardar configuración local</button></div>
+<div class="full"><hr style="border:0;border-top:1px solid #e5e7eb;margin:8px 0 4px">
+<h3 style="margin:8px 0 4px">Datos locales</h3>
+<p class="muted">En esta demo los datos se guardan localmente en este navegador. En la versión conectada podrán sincronizarse con la cuenta del negocio según la configuración elegida.</p>
+<button type="button" class="button danger" onclick="clearFollowups()">Borrar datos locales</button></div>
+</div></section>
+
+<section id="datos" class="view"><h1>Datos e importación</h1><p class="muted">Importa datos reales del negocio sin mezclarlos con los datos de demostración.</p><div class="panel">
+<div class="note"><b>🔒 Importación local</b><br>El CSV se procesa únicamente en este navegador. No se sube a ningún servidor.</div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h2>📥 1. Seleccionar CSV</h2><p class="muted">Clientes, ventas, productos, cobros o albaranes. Para ventas y albaranes puedes importar cajas, variedad y precio por caja.</p><input type="file" id="csvFile" accept=".csv,text/csv" onchange="previewCSV(event)"></div>
+<div class="card" style="grid-column:1/-1"><h2>📎 Opción fácil: subir documentos del negocio</h2><p class="muted">Arrastra aquí facturas, albaranes, Excel, CSV, PDF o fotos. AGAIDAN los recibe y los deja en revisión antes de guardar cualquier dato.</p><label id="agaDocDrop" class="aga-doc-drop" for="agaDocFiles"><span style="font-size:30px">📂</span><b>Arrastra los archivos aquí o pulsa para seleccionarlos</b><small>PDF · Excel · CSV · JSON · JPG · PNG · hasta varios archivos</small></label><input id="agaDocFiles" type="file" multiple accept=".pdf,.xlsx,.xls,.csv,.json,image/*" style="display:none" onchange="agaHandleDocuments(event)"><div id="agaDocStatus" class="small muted" style="margin-top:10px"></div><div id="agaDocList" style="margin-top:12px"></div></div>
+<div class="card"><h2>🗂️ 2. Tipo de datos</h2><label>AGAIDAN lo detecta automáticamente<select id="csvType"><option value="auto" selected>🔎 Detectar automáticamente</option><option value="clientes">👥 Clientes</option><option value="ventas">💶 Ventas</option><option value="productos">📦 Productos</option><option value="cobros">💳 Cobros</option><option value="albaranes">📄 Albaranes</option></select></label><div id="csvDetect" class="small muted" style="margin-top:8px"></div></div>
+</div>
+<div id="csvPreview" style="margin-top:15px"></div>
+<div id="csvImportActions" style="display:none;margin-top:14px" class="card"><h2>3. Confirmar importación</h2><p id="csvImportSummary" class="muted"></p><button class="button" onclick="confirmCSVImport()">✅ Confirmar importación</button><button class="button secondary" style="margin-left:8px" onclick="cancelCSVImport()">Cancelar</button></div>
+<div id="csvImportResult" style="margin-top:14px"></div>
+<div id="importedDataSummary" style="margin-top:14px"></div>
+<div class="card-actions" style="margin-top:18px"><button class="button secondary" onclick="exportData()">📤 Exportar datos locales</button><button class="button danger" onclick="resetAll()">🗑️ Restablecer demo local</button></div>
+</div></section>
+<section id="analisis" class="view"><h1>Análisis</h1><p class="muted">Datos que AGAIDAN está aprendiendo del negocio. Muestra qué información existe y qué información falta.</p><div id="analyticsSummary" class="cards four"></div><div class="panel" style="margin-top:16px"><h2>📋 Calidad de los datos</h2><div id="analyticsQuality"></div></div><div class="panel" style="margin-top:16px"><h2>👥 Clientes para revisar</h2><div id="analyticsClients"></div></div><div class="panel" style="margin-top:16px"><h2>📎 Documentos del piloto</h2><p class="muted">Documentos recibidos del cliente. Un documento no se convierte en un dato de negocio hasta que se revisa y confirma.</p><div id="analyticsDocuments"></div></div></section></main></div>
+
+<div id="modalBack" class="modal-back" onclick="if(event.target===this)closeModal()"><div class="modal"><div id="modalContent"></div></div></div>
+
+<script>
+const prospects=[
+{name:'Restaurante El Molino',type:'Restaurante',zone:'Centro',distance:3.4,opp:'Alta',reason:'Menú diario · posible consumo de pan precocido',phone:'Dato público por validar',status:'Cliente potencial'},
+{name:'Bar La Plaza',type:'Bar',zone:'Centro',distance:2.1,opp:'Alta',reason:'Servicio de desayunos/tapas · posible consumo de pan precocido',phone:'Dato público por validar',status:'Cliente potencial'},
+{name:'Tienda La Despensa',type:'Tienda',zone:'Norte',distance:4.7,opp:'Media',reason:'Venta de alimentación · posible oportunidad de reventa de pan precocido',phone:'Dato público por validar',status:'Cliente potencial'},
+{name:'Restaurante Sol y Sombra',type:'Restaurante',zone:'Sur',distance:5.8,opp:'Media',reason:'Posible consumo de pan · primer contacto pendiente',phone:'Dato público por validar',status:'Cliente potencial'},
+{name:'Café Estación',type:'Cafetería',zone:'Centro',distance:1.5,opp:'Alta',reason:'Desayunos y consumo diario · posible demanda de pan precocido',phone:'Dato público por validar',status:'Cliente potencial'},
+{name:'Alimentación Romero',type:'Tienda',zone:'Oeste',distance:3.9,opp:'Baja',reason:'Posible punto de reventa · revisar encaje con el reparto',phone:'Dato público por validar',status:'Cliente potencial'},
+{name:'Hotel Centro',type:'Hotel',zone:'Centro',distance:2.8,opp:'Media',reason:'Desayunos/hotelería · posible consumo de pan precocido',phone:'Dato público por validar',status:'Cliente potencial'},
+{name:'Panadería Sierra',type:'Panadería',zone:'Norte',distance:4.2,opp:'Media',reason:'Establecimiento de alimentación · oportunidad a validar',phone:'Dato público por validar',status:'Cliente potencial'}
+];
+let route=JSON.parse(agaStorage.getItem('agaidan-route')||'[]');
+// Normaliza rutas guardadas de versiones anteriores: la ruta de AGAIDAN usa nombres de clientes (strings).
+route=Array.isArray(route)?route.map(x=>typeof x==='string'?x:(x&&typeof x.name==='string'?x.name:'')).filter(Boolean):[];
+agaStorage.setItem('agaidan-route',JSON.stringify(route));
+let followups=JSON.parse(agaStorage.getItem('agaidan-followups')||'[]');
+let company=JSON.parse(agaStorage.getItem('agaidan-company')||'{}');
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function escAttr(s){return String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function go(id){const target=document.getElementById(id);if(!target)return;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id==='clientes potenciales')renderProspects();if(id==='rutas')renderRoute();if(id==='seguimientos')renderFollowups();if(id==='alertas')renderAlerts();if(id==='inicio')renderHome();if(id==='empresa')loadCompany();if(id==='conductor')initDriver();if(id==='finanzas')renderDriverFinance();if(id==='clientes')renderImportedClientsMain();if(id==='inactivos')agaidanRenderInactive();if(id==='analisis')agaidanRenderAnalytics();window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.view));
+
+function renderAlerts(){
+const box=document.getElementById('alertas');
+if(!box)return;
+}
+
+function canonicalRouteForRecord(v){
+  const truck=String(v?.truck||'').trim();
+  const direct=String(v?.route||'').trim();
+  let cfg=[];try{cfg=getTruckConfig()||[]}catch(e){cfg=[]}
+  const t=cfg.find(x=>String(x?.name||x?.truck||'').trim()===truck);
+  const configured=String(t?.route||t?.habitualRoute||'').trim();
+  const explicitDirect=/^ruta\s*\d+/i.test(direct);
+  const explicitConfigured=/^ruta\s*\d+/i.test(configured);
+  // Una ruta escrita explícitamente en el registro prevalece. Las ciudades/zonas
+  // antiguas (p.ej. Toledo/Madrid) no se convierten en rutas si existe una ruta
+  // canónica del camión; cuando la configuración también contiene una ciudad/zona,
+  // usamos el número del camión para mantener una única clave (Ruta 1, Ruta 2...).
+  if(explicitDirect)return direct;
+  if(explicitConfigured)return configured;
+  const n=(truck.match(/(\d+)/)||[])[1];
+  if(n)return 'Ruta '+n;
+  return direct||configured||'Ruta no configurada';
+}
+function ownerRouteKey(v){return canonicalRouteForRecord(v)}
+function ownerInsightData(){
+  const sales=salesEntries(),collections=collectionEntries(),entries=driverEntries(),notes=deliveryNoteEntries();
+  const salesTotal=sales.reduce((a,v)=>a+(Number(v.amount)||0),0),colTotal=collections.reduce((a,v)=>a+(Number(v.amount)||0),0),expenses=entries.reduce((a,v)=>a+(Number(v.fuelAmount)||0)+(Number(v.tolls)||0)+(Number(v.parking)||0)+(Number(v.repairs)||0)+(Number(v.other)||0),0);
+  const boxesKnown=sales.filter(v=>Number.isFinite(Number(v.boxes))&&Number(v.boxes)>0).reduce((a,v)=>a+(Number(v.boxes)||0),0),pending=Math.max(0,salesTotal-colTotal),margin=salesTotal-expenses;
+  const alerts=[],today=[],opportunities=[];
+  const missingProduct=sales.filter(v=>!String(v.product||'').trim()).length;
+  const missingTruck=sales.filter(v=>!String(v.truck||'').trim()).length;
+  const missingRoute=sales.filter(v=>!String(v.truck||'').trim()||!String(v.route||'').trim()).length;
+  const routeMap={};
+  sales.forEach(v=>{const r=ownerRouteKey(v);routeMap[r] ||= {sales:0,expenses:0,boxes:0};routeMap[r].sales+=Number(v.amount)||0;routeMap[r].boxes+=Number(v.boxes)||0});
+  entries.forEach(v=>{const r=ownerRouteKey(v);routeMap[r] ||= {sales:0,expenses:0,boxes:0};routeMap[r].expenses+=(Number(v.fuelAmount)||0)+(Number(v.tolls)||0)+(Number(v.parking)||0)+(Number(v.repairs)||0)+(Number(v.other)||0)});
+  Object.entries(routeMap).forEach(([r,v])=>{if(v.sales>0&&v.expenses>v.sales)alerts.push({kind:'danger',title:'Ruta con margen negativo calculado',text:r+' · ventas '+moneyLocal(v.sales)+' · gastos '+moneyLocal(v.expenses)+' · margen '+moneyLocal(v.sales-v.expenses),action:'go(\'finanzas\')',label:'Revisar ruta',evidence:'Dato registrado',inference:'El margen calculado es negativo.',missing:'Puede faltar información de ingresos o gastos.'});});
+  if(missingProduct)alerts.push({kind:'info',title:'Ventas sin variedad',text:missingProduct+' venta(s) sin producto/variedad. No se puede atribuir ese volumen a una variedad.',action:'go(\'productos\')',label:'Completar productos',evidence:'Dato registrado',inference:'El análisis por variedad queda incompleto.',missing:'Falta la variedad de esas ventas.'});
+  if(pending>0)alerts.push({kind:'warn',title:'Ventas sin cobro registrado',text:moneyLocal(pending)+' pendiente según los registros de ventas y cobros.',action:'go(\'cobros\')',label:'Revisar cobros',evidence:'Dato registrado',inference:'Hay importe registrado que todavía no aparece como cobro.',missing:'No confirma por sí solo una deuda real.'});
+  if(notes.some(n=>n.status!=='confirmed'))alerts.push({kind:'warn',title:'Albaranes pendientes de confirmación',text:notes.filter(n=>n.status!=='confirmed').length+' albarán(es) no confirmados.',action:'go(\'albaranes\')',label:'Revisar albaranes',evidence:'Dato registrado',inference:'La venta asociada no debería darse por confirmada.',missing:'Falta la confirmación del dueño.'});
+  if(missingTruck||missingRoute)today.push({kind:'info',title:'Completar ruta/camión',text:missingRoute+' venta(s) necesitan completar camión y/o ruta para mejorar el análisis operativo.',action:'go(\'ventas\')',label:'Revisar ventas',evidence:'Dato registrado',inference:'La lectura por ruta puede estar incompleta.',missing:'Falta camión/ruta en '+missingRoute+' venta(s).'});
+  if(missingProduct)today.push({kind:'info',title:'Completar variedades',text:missingProduct+' venta(s) no tienen variedad asociada.',action:'go(\'ventas\')',label:'Completar ventas',evidence:'Dato registrado',inference:'La inteligencia de producto no incluye esas ventas.',missing:'Falta la variedad.'});
+  if(pending>0)today.push({kind:'warn',title:'Revisar cobros',text:'Hay '+moneyLocal(pending)+' de ventas sin cobro registrado.',action:'go(\'cobros\')',label:'Revisar cobros',evidence:'Dato registrado',inference:'Conviene comprobar si esos importes ya fueron cobrados.',missing:'No hay confirmación de deuda.'});
+  if(alerts.some(x=>x.kind==='danger'))today.unshift(alerts.find(x=>x.kind==='danger'));
+  if(expenses>0&&!today.some(x=>x.title==='Revisar cobros'))today.push({kind:'info',title:'Revisar gastos de ruta',text:'Hay '+moneyLocal(expenses)+' en gastos de conductor registrados.',action:'go(\'finanzas\')',label:'Ver finanzas',evidence:'Dato registrado',inference:'El coste debe contextualizarse junto con las ventas.',missing:'No todos los costes externos están necesariamente registrados.'});
+  if(!sales.length&&!entries.length&&!collections.length)today.push({kind:'ok',title:'Todavía no hay actividad suficiente',text:'Registra ventas/albaranes, cobros y gastos para activar el análisis.',action:'go(\'datos\')',label:'Ver datos',evidence:'No hay registros financieros.',inference:'No es posible generar señales fiables.',missing:'Faltan datos operativos.'});
+
+  // Oportunidades: solo patrones observables; nunca se presentan como hechos comerciales.
+  const byClient={}; const byProduct={};
+  sales.forEach(v=>{const c=String(v.client||'').trim(),p=String(v.product||'').trim(),b=Number(v.boxes)||0;if(c){byClient[c] ||= {boxes:0,products:new Set(),sales:0};byClient[c].boxes+=b;byClient[c].sales+=Number(v.amount)||0;if(p)byClient[c].products.add(p)}if(p){byProduct[p] ||= {boxes:0,clients:new Set()};byProduct[p].boxes+=b;if(c)byProduct[p].clients.add(c)}});
+  const products=Object.entries(byProduct).filter(([,v])=>v.boxes>0).sort((a,b)=>b[1].boxes-a[1].boxes);
+  if(products.length>=2){
+    const top=products[0][0],second=products[1][0];
+    const clientsTop=new Set(byProduct[top].clients), clientsSecond=new Set(byProduct[second].clients);
+    const candidates=[...clientsTop].filter(c=>!clientsSecond.has(c));
+    if(candidates.length)opportunities.push({kind:'info',title:'Posible oportunidad de variedad',text:candidates.slice(0,3).join(', ')+' compran '+top+' y no aparece '+second+' en sus ventas registradas.',action:'go(\'ventas\')',label:'Revisar ventas',evidence:'Patrón observado en ventas registradas.',inference:'Podría existir una oportunidad de ofrecer '+second+' a esos clientes.',missing:'No hay datos sobre preferencias, stock ni motivo de compra.'});
+  }
+  const multi=Object.entries(byClient).filter(([,v])=>v.products.size>=2).sort((a,b)=>b[1].products.size-a[1].products.size);
+  if(multi.length&&opportunities.length<3)opportunities.push({kind:'info',title:'Clientes con compra de varias variedades',text:multi.slice(0,3).map(([c,v])=>c+' ('+v.products.size+')').join(' · '),action:'go(\'clientes\')',label:'Revisar clientes',evidence:'Hay clientes con 2 o más variedades registradas.',inference:'Estos clientes pueden servir para analizar combinaciones de compra.',missing:'No hay suficiente historial para medir recurrencia o potencial.'});
+  const positiveRoutes=Object.entries(routeMap).filter(([,v])=>v.sales>0&&v.expenses>=0&&v.sales>v.expenses).sort((a,b)=>(b[1].sales-b[1].expenses)-(a[1].sales-a[1].expenses));
+  if(positiveRoutes.length&&opportunities.length<3)opportunities.push({kind:'info',title:'Ruta con margen calculado positivo',text:positiveRoutes[0][0]+' · margen calculado '+moneyLocal(positiveRoutes[0][1].sales-positiveRoutes[0][1].expenses),action:'go(\'finanzas\')',label:'Analizar ruta',evidence:'Ventas y gastos registrados.',inference:'Puede ser útil estudiar qué clientes/productos sostienen ese resultado.',missing:'No hay todavía suficiente histórico para atribuir la causa.'});
+  return {salesTotal,colTotal,expenses,boxesKnown,pending,margin,alerts,today,opportunities,routeMap,sales,collections,entries,notes};
+}
+function insightMarkup(i,compact){return `<div class="insight-item insight-${i.kind}"><div class="insight-title">${esc(i.title)}</div><div class="muted">${esc(i.text)}</div>${!compact?`<div class="data-origin"><b>Dato:</b> ${esc(i.evidence||'—')} · <b>Inferencia:</b> ${esc(i.inference||'—')} · <b>Falta:</b> ${esc(i.missing||'—')}</div>`:''}${i.action?`<button class="button secondary insight-action" onclick="${i.action}">${esc(i.label||'Ver detalle')}</button>`:''}</div>`}
+function renderOwnerControl(){
+  const d=ownerInsightData(),set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set('ownerKpiSales',d.sales.length?moneyLocal(d.salesTotal):'Sin datos');set('ownerKpiBoxes',d.boxesKnown?d.boxesKnown.toLocaleString('es-ES')+' cajas':'Sin datos');set('ownerKpiPending',(d.sales.length||d.collections.length)?moneyLocal(d.pending):'Sin datos');set('ownerKpiMargin',d.sales.length?moneyLocal(d.margin):'No calculable');
+  const priority=[...d.alerts.filter(x=>x.kind==='danger'),...d.alerts.filter(x=>x.kind==='warn'),...d.today.filter(x=>x.kind==='info'),...d.opportunities].filter((x,i,a)=>a.findIndex(y=>y.title===x.title)===i).slice(0,3);
+  const briefing=document.getElementById('ownerBriefing');if(briefing)briefing.innerHTML=priority.length?priority.map(i=>insightMarkup(i,false)).join(''):'<div class="insight-item insight-ok"><div class="insight-title">Sin prioridades calculables</div><div class="muted">No hay suficiente evidencia registrada para recomendar una revisión concreta.</div></div>';
+  const today=document.getElementById('ownerTodayInsights');if(today)today.innerHTML=d.today.length?d.today.slice(0,5).map(i=>insightMarkup(i,false)).join(''):'<div class="empty">No hay señales que revisar con los datos actuales.</div>';
+  const opp=document.getElementById('ownerOpportunityInsights');if(opp)opp.innerHTML=d.opportunities.length?d.opportunities.slice(0,5).map(i=>insightMarkup(i,false)).join(''):'<div class="insight-item insight-ok"><div class="insight-title">Todavía no hay oportunidades demostrables</div><div class="muted">AGAIDAN necesita más historial de clientes, variedades, cajas o rutas para detectar patrones comerciales con evidencia.</div></div>';
+  const box=document.getElementById('ownerBoxInsights');if(box){const byP={};d.sales.forEach(v=>{const p=String(v.product||'').trim();if(!p)return;byP[p] ||= {boxes:0,sales:0,clients:new Set()};byP[p].boxes+=Number(v.boxes)||0;byP[p].sales+=Number(v.amount)||0;if(v.client)byP[p].clients.add(v.client)});const rows=Object.entries(byP).sort((a,b)=>b[1].boxes-a[1].boxes).slice(0,5);box.innerHTML=rows.length?'<table class="owner-table"><thead><tr><th>Variedad</th><th>Cajas</th><th>Ventas</th><th>Clientes</th></tr></thead><tbody>'+rows.map(([p,v])=>`<tr><td>📦 ${esc(p)}</td><td>${v.boxes}</td><td>${moneyLocal(v.sales)}</td><td>${v.clients.size}</td></tr>`).join('')+'</tbody></table><div class="data-origin">Solo ventas con variedad y cajas registradas.</div>':'<div class="empty">Todavía no hay suficientes ventas con variedad y cajas para generar inteligencia de producto.</div>'}
+  const route=document.getElementById('ownerRouteInsights');if(route){const rows=Object.entries(d.routeMap).filter(([k,v])=>v.sales||v.expenses).sort((a,b)=>(b[1].sales-b[1].expenses)-(a[1].sales-a[1].expenses));route.innerHTML=rows.length?'<table class="owner-table"><thead><tr><th>Ruta</th><th>Ventas</th><th>Gastos</th><th>Margen</th><th>Cajas</th></tr></thead><tbody>'+rows.slice(0,8).map(([r,v])=>`<tr><td>🛣️ ${esc(r)}</td><td>${moneyLocal(v.sales)}</td><td>${moneyLocal(v.expenses)}</td><td>${moneyLocal(v.sales-v.expenses)}</td><td>${v.boxes||'—'}</td></tr>`).join('')+'</tbody></table><div class="data-origin">El margen es ventas registradas menos gastos registrados; puede estar incompleto.</div>':'<div class="empty">Todavía no hay datos suficientes por ruta.</div>'}
+  const al=document.getElementById('ownerAlertInsights');if(al)al.innerHTML=d.alerts.length?d.alerts.slice(0,5).map(i=>insightMarkup(i,false)).join(''):'<div class="insight-item insight-ok"><div class="insight-title">Sin alertas calculables</div><div class="muted">No hay una señal suficiente con los datos actuales.</div></div>';
+}
+function renderDynamicAlerts(){const d=ownerInsightData(),box=document.getElementById('alertsDynamicList');if(!box)return;box.innerHTML=d.alerts.length?d.alerts.map(i=>`<div class="insight-item insight-${i.kind}"><div class="insight-title">${i.title}</div><div class="muted">${i.text}</div><button class="button secondary insight-action" onclick="${i.action}">${i.label}</button></div>`).join(''):'<div class="empty">No hay alertas calculables con los datos actuales. Cuando exista suficiente historial, AGAIDAN generará señales basadas en datos registrados.</div>';}
+function renderHome(){const imported=getImportedClients();const hc=document.getElementById('homeClientCount');if(hc)hc.textContent=imported.length;const t=financeTotals();const insights=ownerInsightData();const ho=document.getElementById('homeOppCount');if(ho)ho.textContent='—';const ha=document.getElementById('homeAlertCount');if(ha)ha.textContent=insights.alerts.length;const fc=document.getElementById('followCount');if(fc)fc.textContent=followups.length;const sub=document.getElementById('companySubtitle');if(sub)sub.textContent=company.tradeName||company.companyName||'Tu resumen del negocio';const h=document.getElementById('homeFollow');if(h)h.innerHTML=followups.length?followups.slice(-4).reverse().map(f=>`<div class="follow"><b>${esc(f.name)}</b><br><span class="muted">${esc(f.channel)} · ${esc(f.next||'sin próxima fecha')}</span></div>`).join(''):'<div class="empty">Todavía no hay seguimientos guardados.</div>';renderOwnerControl();renderDynamicAlerts();}
+
+function getImportedClients(){try{return JSON.parse(agaStorage.getItem('agaidan-imported-clientes')||'[]')}catch(e){return[]}}
+function renderImportedClientsMain(){
+const box=document.getElementById('importedClientsMain');
+if(!box)return;
+const list=getImportedClients();
+if(!list.length){box.innerHTML='<div class="empty">Todavía no hay clientes importados. Importa un CSV desde Datos e importación.</div>';return;}
+box.innerHTML='<div class="results">'+list.map(c=>{
+const name=c.Nombre||c.nombre||c.Cliente||c.cliente||c.name||'Cliente importado';
+const type=c.Tipo||c.tipo||c.type||'Sin indicar';
+const zone=c.Zona||c.zona||c.zone||'Sin indicar';
+const phone=c.Teléfono||c.telefono||c.phone||'';
+return '<article class="cliente potencial"><span class="opp medium">DATO IMPORTADO</span><h3>'+esc(name)+'</h3><p><b>'+esc(type)+'</b> · '+esc(zone)+'</p><div class="meta"><div><b>Origen</b><br>CSV importado</div><div><b>Teléfono</b><br>'+esc(phone||'Sin indicar')+'</div></div><div class="card-actions"><button type="button" class="button imported-client-btn" data-name="'+escAttr(name)+'">Ver ficha</button></div></article>';
+}).join('')+'</div>';
+box.querySelectorAll('.imported-client-btn').forEach(btn=>btn.addEventListener('click',()=>openImportedClient(btn.dataset.name)));
+}
+function openImportedClient(name){const list=getImportedClients();const c=list.find(x=>(x.Nombre||x.nombre||x.Cliente||x.cliente||x.name||'')===name)||{};const type=c.Tipo||c.tipo||c.type||'Sin indicar',zone=c.Zona||c.zona||c.zone||'Sin indicar',phone=c.Teléfono||c.telefono||c.phone||'Sin indicar';document.getElementById('modalContent').innerHTML='<div class="modal-head"><div><h2>'+esc(name)+'</h2><span class="status high">Cliente · Importado</span></div><button class="close" onclick="closeModal()">✕</button></div><div class="section"><h3>Datos disponibles</h3><div class="meta"><div>Tipo<br><b>'+esc(type)+'</b></div><div>Zona<br><b>'+esc(zone)+'</b></div><div>Teléfono<br><b>'+esc(phone)+'</b></div><div>Origen<br><b>CSV importado localmente</b></div></div></div><div class="section"><h3>Análisis de AGAIDAN</h3><p>Todavía no hay datos suficientes para afirmar ventas, frecuencia de compra, riesgo, margen u oportunidades específicas.</p></div><div class="section"><h3>Datos que faltan</h3><p>Histórico de compras, ventas, productos, cobros y actividad. AGAIDAN no inventará estos datos.</p></div>';document.getElementById('modalBack').style.display='flex'}
+function renderProspects(){
+let z=(document.getElementById('zone').value||'').toLowerCase().trim(),t=document.getElementById('type').value,r=+document.getElementById('radius').value;
+if(!z){document.getElementById('results').innerHTML='<div class="empty">Selecciona una zona o ciudad para comenzar la búsqueda.</div>';return;}
+let list=prospects.filter(p=>(p.zone.toLowerCase().includes(z))&&(!t||p.type===t)&&p.distance<=r);
+const demoHtml=list.map(p=>{let inRoute=route.includes(p.name);return `<article class="cliente potencial"><span class="opp ${p.opp==='Alta'?'high':p.opp==='Media'?'medium':'low'}">Oportunidad ${p.opp}</span><h3>${esc(p.name)}</h3><p><b>${esc(p.type)}</b> · ${esc(p.zone)} · ${p.distance.toFixed(1)} km</p><div class="meta"><div><b>Dato disponible</b><br>${esc(p.phone)}</div><div><b>Oportunidad</b><br>${esc(p.reason)}</div></div><div class="card-actions"><button type="button" class="button" onclick="openProspect('${escAttr(p.name)}')">Ver ficha</button><button type="button" class="button secondary" onclick="addRoute('${escAttr(p.name)}')">${inRoute?'✓ En ruta':'Añadir a ruta'}</button></div></article>`}).join('');
+document.getElementById('results').innerHTML=demoHtml||'<div class="empty">No hay nuevos negocios en esa zona con los filtros seleccionados.</div>';
+}
+
+function addToRoute(name, btn){
+  const item = prospects.find(p=>p.name===name);
+  if(!item) return;
+  // La ruta usa el mismo formato que el resto de la app: nombres de clientes, no objetos.
+  if(route.includes(name)){
+    if(btn){
+      btn.textContent='✓ Añadido a la ruta';
+      btn.disabled=true;
+      btn.classList.add('added');
+    }
+    return;
+  }
+  route.push(name);
+  agaStorage.setItem('agaidan-route',JSON.stringify(route));
+  if(btn){
+    btn.textContent='✓ Añadido a la ruta';
+    btn.disabled=true;
+    btn.classList.add('added');
+  }
+  renderRoute();
+  renderProspects();
+}
+function filterSegment(type){renderSegments();}
+function renderSegments(){const box=document.getElementById('segmentSummary');if(!box)return;const list=getImportedClients();if(!list.length){box.innerHTML='<div class="empty">No hay clientes importados suficientes para crear segmentos.</div>';return}const norm=(c,k)=>String(c[k]||c[k.toLowerCase()]||'Sin indicar').trim()||'Sin indicar';const groups=(key)=>{const m={};list.forEach(c=>{const v=norm(c,key);m[v]=(m[v]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1])};const tipos=groups('Tipo'),zonas=groups('Zona');box.innerHTML='<div class="panel"><h2>👥 Por tipo</h2>'+tipos.map(([v,n])=>'<div class="follow"><b>'+esc(v)+'</b><br><span class="muted">'+n+' cliente'+(n===1?'':'s')+'</span></div>').join('')+'</div><div class="panel"><h2>📍 Por zona</h2>'+zonas.map(([v,n])=>'<div class="follow"><b>'+esc(v)+'</b><br><span class="muted">'+n+' cliente'+(n===1?'':'s')+'</span></div>').join('')+'</div>'}
+
+function openProspect(name){
+let p=prospects.find(x=>x.name===name);if(!p)return;
+document.getElementById('modalContent').innerHTML=`<div class="modal-head"><div><h2>${esc(p.name)}</h2><span class="status">${esc(p.status)}</span></div><button class="close" onclick="closeModal()">✕</button></div>
+<div class="section"><h3>Datos disponibles</h3><div class="meta"><div>Tipo<br><b>${esc(p.type)}</b></div><div>Zona<br><b>${esc(p.zone)}</b></div><div>Distancia interna<br><b>${p.distance.toFixed(1)} km</b></div><div>Contacto<br><b>${esc(p.phone)}</b></div></div></div>
+<div class="section"><h3>Oportunidad</h3><p>${esc(p.reason)}</p></div><div class="section"><h3>Recomendación</h3><p>Preparar un primer contacto breve, confirmar necesidades y registrar el resultado.</p></div>
+<div class="section"><h3>Registrar contacto</h3><div class="form"><select id="contactChannel"><option>Llamada</option><option>Visita</option><option>WhatsApp</option><option>Email</option></select><input id="contactResult" placeholder="Resultado"><input id="contactNotes" placeholder="Notas"><input id="nextFollow" type="date"></div><button class="button" style="margin-top:10px" onclick="reviewContact('${escAttr(p.name)}')">Revisar antes de guardar</button></div>
+<div class="section"><h3>Historial local</h3><div>${historyFor(p.name)}</div></div>`;
+document.getElementById('modalBack').style.display='flex';
+}
+function historyFor(name){let h=followups.filter(f=>f.name===name);return h.length?h.map(f=>`<div class="history"><b>${esc(f.channel)}</b> · ${esc(f.result||'sin resultado')}<br><span class="muted">${esc(f.notes||'Sin notas')} · ${esc(f.next||'sin seguimiento')}</span></div>`).join(''):'<span class="muted">No hay contactos guardados.</span>';}
+function reviewContact(name){
+let data={name,channel:document.getElementById('contactChannel').value,result:document.getElementById('contactResult').value.trim(),notes:document.getElementById('contactNotes').value.trim(),next:document.getElementById('nextFollow').value};
+document.getElementById('modalContent').innerHTML=`<div class="modal-head"><h2>Revisar contacto</h2><button class="close" onclick="openProspect('${escAttr(name)}')">✕</button></div><div class="note">Todavía <b>no se ha guardado</b>.</div><div class="meta"><div>Cliente potencial<br><b>${esc(name)}</b></div><div>Canal<br><b>${esc(data.channel)}</b></div><div>Resultado<br><b>${esc(data.result||'Sin indicar')}</b></div><div>Próximo seguimiento<br><b>${esc(data.next||'Sin fecha')}</b></div></div><p><b>Notas:</b> ${esc(data.notes||'Sin notas')}</p><button class="button" onclick='saveContact(${JSON.stringify(data)})'>Confirmar y guardar</button> <button class="button secondary" onclick="openProspect('${escAttr(name)}')">Volver</button>`;
+}
+function saveContact(data){followups.push(data);agaStorage.setItem('agaidan-followups',JSON.stringify(followups));closeModal();renderHome();alert('Contacto guardado localmente.');}
+function openClient(name){document.getElementById('modalContent').innerHTML=`<div class="modal-head"><div><h2>${esc(name)}</h2><span class="status high">Cliente</span></div><button class="close" onclick="closeModal()">✕</button></div>
+<div class="section"><h3>Datos disponibles</h3><p>Información básica disponible en esta demo: nombre, zona y estado del cliente.</p><div class="meta"><div>Cliente<br><b>${esc(name)}</b></div><div>Origen<br><b>Datos de demostración</b></div></div></div>
+<div class="section"><h3>Análisis de AGAIDAN</h3><p>AGAIDAN puede proponer oportunidades, pero en esta demo no dispone de histórico real suficiente para calcularlas automáticamente.</p></div>
+<div class="section"><h3>Datos que faltan</h3><p>Histórico de compras, frecuencia, ventas, productos, cobros y márgenes. Si en el futuro se detecta que deja de comprar, su estado principal seguirá siendo <b>Cliente activo</b> y la situación aparecerá como una <b>alerta</b> de 'Cliente sin compras'. Sin datos de origen, AGAIDAN no afirmará inactividad, riesgo, ventas o margen.</p></div>`;document.getElementById('modalBack').style.display='flex';}
+function closeModal(){
+  const back=document.getElementById('modalBack');
+  const returnTo=window.modalReturnToSettlement;
+  window.modalReturnToSettlement=null;
+  if(returnTo&&returnTo.route){openSettlementRoute(returnTo.truck,returnTo.route);return}
+  back.style.display='none';
+}
+
+function addRoute(name){if(!route.includes(name)){route.push(name);agaStorage.setItem('agaidan-route',JSON.stringify(route));}renderRoute();renderProspects();}
+function renderRoute(){
+const list=document.getElementById('routeList');
+const summary=document.getElementById('routeSummary');
+if(!list||!summary)return;
+if(!route.length){
+summary.innerHTML='<b>Ruta vacía.</b> Añade clientes potenciales desde Buscar clientes.';
+list.innerHTML='<div class="empty">Todavía no hay comercios en la ruta.</div>';
+return;
+}
+const items=route.map((name,index)=>{
+const p=prospects.find(x=>x.name===name);
+return {name,index,p};
+});
+const total=items.reduce((s,x)=>s+(x.p?x.p.distance:0),0);
+summary.innerHTML=`<b>${items.length} visitas seleccionadas</b> · ${total.toFixed(1)} km aprox. según los datos de esta demo · orden manual o por cercanía`;
+list.innerHTML=items.map((x,i)=>{
+const p=x.p||{};
+const status=p.status==='Cliente'?'Cliente activo':'Cliente potencial';
+const objective=p.status==='Cliente'
+?'Seguimiento del cliente y detección de nuevas necesidades.'
+:'Primer contacto: presentar el surtido de pan precocido y conocer necesidades.';
+const query=encodeURIComponent(`${x.name}, ${p.zone||''}`);
+return `<div class="follow route-stop">
+<div class="route-number">${i+1}</div>
+<div class="route-main">
+<b>${esc(x.name)}</b>
+<div class="muted">${esc(status)} · ${esc(p.zone||'Zona no indicada')} · ${p.distance!=null?p.distance.toFixed(1)+' km':'distancia no disponible'}</div>
+<div class="muted">🎯 ${esc(objective)}</div>
+</div>
+<div class="card-actions">
+<button type="button" class="button secondary" onclick="openProspect('${escAttr(x.name)}')">Ficha</button>
+<button type="button" class="button secondary" onclick="moveRoute(${x.index},-1)">↑</button>
+<button type="button" class="button secondary" onclick="moveRoute(${x.index},1)">↓</button>
+<button type="button" class="button secondary" onclick="openGuidance('${query}')">🧭 Navegar</button>
+<button type="button" class="button danger" onclick="removeRoute('${escAttr(x.name)}')">Quitar</button>
+</div>
+</div>`;
+}).join('');
+}
+function sortRouteByDistance(){
+route.sort((a,b)=>{
+const pa=prospects.find(x=>x.name===a),pb=prospects.find(x=>x.name===b);
+return (pa?.distance??999999)-(pb?.distance??999999);
+});
+agaStorage.setItem('agaidan-route',JSON.stringify(route));
+renderRoute();
+}
+function moveRoute(index,delta){
+const next=index+delta;
+if(next<0||next>=route.length)return;
+[route[index],route[next]]=[route[next],route[index]];
+agaStorage.setItem('agaidan-route',JSON.stringify(route));
+renderRoute();
+}
+function removeRoute(name){
+route=route.filter(x=>x!==name);
+agaStorage.setItem('agaidan-route',JSON.stringify(route));
+renderRoute();
+renderProspects();
+}
+function openGuidance(query){
+window.open('https://www.google.com/maps/dir/?api=1&destination='+query,'_blank','noopener');
+}
+function clearRoute(){route=[];agaStorage.removeItem('agaidan-route');renderRoute();}
+function renderFollowups(){document.getElementById('followList').innerHTML=followups.length?followups.slice().reverse().map(f=>`<div class="follow"><b>${esc(f.name)}</b><br><span class="muted">${esc(f.channel)} · ${esc(f.result||'sin resultado')} · próximo: ${esc(f.next||'sin fecha')}</span><br>${esc(f.notes||'')}</div>`).join(''):'<div class="empty">No hay seguimientos guardados.</div>';}
+function clearFollowups(){if(confirm('¿Borrar los seguimientos locales?')){followups=[];agaStorage.removeItem('agaidan-followups');renderFollowups();renderHome();}}
+
+function commercialAnswer(q){
+let x=q.toLowerCase();
+if(x.includes('visitar'))return `<b>Datos disponibles</b><br>
+☕ Café Estación — 1,5 km — prioridad alta<br>
+🍽️ Bar La Plaza — 2,1 km — prioridad alta<br>
+🍽️ Restaurante El Molino — 3,4 km — prioridad alta<br><br>
+<b>Recomendación</b><br>
+Empezaría por <b>Café Estación</b>, después <b>Bar La Plaza</b> y luego <b>Restaurante El Molino</b>, porque los tres están en el Centro y este orden reduce desplazamientos dentro de la zona.<br><br>
+<small>Es una recomendación basada en los datos de demostración disponibles. En la versión conectada, AGAIDAN podrá tener en cuenta datos reales de clientes, rutas y visitas.</small>`;
+if(x.includes('hoy'))return `<b>Datos disponibles</b><br>
+☕ Café Estación — prioridad alta<br>
+🍽️ Bar La Plaza — prioridad alta<br>
+🍽️ Restaurante El Molino — prioridad alta<br><br>
+<b>Recomendación</b><br>
+Revisar primero estos tres negocios del Centro y confirmar la ruta antes de salir.<br><br>
+<small>Estos datos son de demostración. En la versión conectada, AGAIDAN utilizará los datos reales autorizados del negocio para hacer esta recomendación.</small>`;
+if(x.includes('pendientes de primer contacto')||x.includes('primer contacto'))return `<b>Clientes potenciales pendientes de primer contacto</b><br>
+• 🍽️ Restaurante El Molino<br>
+• 🍽️ Restaurante Sol y Sombra<br>
+• 🏨 Hotel Centro<br>
+• 🛒 Alimentación Romero<br>
+• 🍞 Panadería Sierra<br><br>
+<b>Siguiente paso recomendado</b><br>
+Empezar por los clientes potenciales con prioridad más alta y registrar el resultado del primer contacto.<br><br>
+<small>La demo no tiene un historial real de contactos. Esta lista refleja los registros que figuran como pendientes de primer contacto en los datos de demostración.</small>`;
+if(x.includes('añadir')&&x.includes('ruta'))return `<b>Clientes potenciales que podría tener sentido añadir</b><br>
+<div class="assistant-route-option">☕ <b>Café Estación</b> — 1,5 km — prioridad alta<br><small>¿Quieres añadirlo a la ruta?</small> <button class="btn" onclick="addToRoute('Café Estación',this)" ${JSON.parse(agaStorage.getItem('agaidan-route')||'[]').includes('Café Estación')?'disabled class="btn added"':''}>${JSON.parse(agaStorage.getItem('agaidan-route')||'[]').includes('Café Estación')?'✓ Añadido a la ruta':'Añadir a la ruta'}</button></div>
+<div class="assistant-route-option">🍽️ <b>Bar La Plaza</b> — 2,1 km — prioridad alta<br><small>¿Quieres añadirlo a la ruta?</small> <button class="btn" onclick="addToRoute('Bar La Plaza',this)" ${JSON.parse(agaStorage.getItem('agaidan-route')||'[]').includes('Bar La Plaza')?'disabled class="btn added"':''}>${JSON.parse(agaStorage.getItem('agaidan-route')||'[]').includes('Bar La Plaza')?'✓ Añadido a la ruta':'Añadir a la ruta'}</button></div>
+<div class="assistant-route-option">🍽️ <b>Restaurante El Molino</b> — 3,4 km — prioridad alta<br><small>¿Quieres añadirlo a la ruta?</small> <button class="btn" onclick="addToRoute('Restaurante El Molino',this)" ${JSON.parse(agaStorage.getItem('agaidan-route')||'[]').includes('Restaurante El Molino')?'disabled class="btn added"':''}>${JSON.parse(agaStorage.getItem('agaidan-route')||'[]').includes('Restaurante El Molino')?'✓ Añadido a la ruta':'Añadir a la ruta'}</button></div>
+<br><small>AGAIDAN propone estos clientes potenciales a partir de los datos de demostración. Tú decides cuáles añadir.</small>`;
+if(x.includes('ruta'))return route.length?`<b>Datos:</b> tienes ${route.length} comercio(s) en la ruta: ${route.map(esc).join(', ')}.`:'No hay ruta guardada todavía.';
+if(x.includes('inactivo')||x.includes('riesgo'))return `<b>Limitación:</b> no hay histórico real de pedidos. No puedo afirmar que un cliente esté inactivo o en riesgo.<br><br><b>Siguiente paso:</b> conectar histórico y mostrar el dato que origine la señal.`;
+if(x.includes('información')||x.includes('informacion')||x.includes('falta')||x.includes('faltan')||x.includes('mejores decisiones')||x.includes('mejor decisión')||x.includes('mejorar decisiones'))return `<b>Información que falta en esta demo</b><br>
+• Historial de compras y frecuencia de compra<br>
+• Ventas por cliente y por producto<br>
+• Productos que compra cada cliente<br>
+• Cobros y pagos pendientes<br>
+• Historial de llamadas, visitas y contactos<br>
+• Agenda y disponibilidad para organizar visitas<br>
+• Márgenes por producto o cliente<br><br>
+<b>¿Para qué serviría?</b><br>
+Con estos datos, AGAIDAN podría hacer recomendaciones más precisas sobre a quién visitar, a quién llamar, qué clientes necesitan atención y qué oportunidades revisar.<br><br>
+<small>Ahora mismo no están conectados estos datos, por lo que la demo no puede afirmar situaciones reales ni calcular recomendaciones basadas en ellos.</small>`;
+if(x.includes('más cerca')||x.includes('mas cerca')||x.includes('cerca'))return `<b>Clientes potenciales más cercanos</b><br>
+☕ Café Estación — 1,5 km<br>
+🍽️ Bar La Plaza — 2,1 km<br>
+🏨 Hotel Centro — 2,8 km<br>
+🍽️ Restaurante El Molino — 3,4 km<br>
+🛒 Alimentación Romero — 3,9 km<br>
+🍞 Panadería Sierra — 4,2 km<br>
+🛒 Tienda La Despensa — 4,7 km<br>
+🍽️ Restaurante Sol y Sombra — 5,8 km<br><br>
+<small>Distancias de demostración. En la versión conectada se usarán datos de ubicación autorizados.</small>`;
+if(x.includes('mayor potencial')||x.includes('potencial para vender'))return `<b>Negocios con mayor potencial en la demo</b><br>
+☕ <b>Café Estación</b> — desayunos y consumo diario; señal de posible consumo frecuente de pan precocido.<br>
+🍽️ <b>Bar La Plaza</b> — desayunos y tapas; señal de posible consumo de pan precocido.<br>
+🍽️ <b>Restaurante El Molino</b> — menú diario; señal de posible consumo de pan precocido.<br>
+🏨 <b>Hotel Centro</b> — desayunos/hotelería; señal de posible consumo de pan precocido.<br><br>
+<b>Recomendación</b><br>
+En esta demo, Café Estación y Bar La Plaza presentan señales especialmente relacionadas con consumo frecuente de pan. Conviene validar la necesidad real antes de considerarla confirmada.<br><br>
+<small>Es una valoración basada únicamente en los datos de demostración disponibles; no confirma ventas ni necesidades reales.</small>`;
+if(x.includes('oportunidades'))return `<b>Oportunidades de la demo</b><br>
+• ☕ Café Estación — desayunos y consumo diario; posible demanda de pan precocido.<br>
+• 🍽️ Bar La Plaza — desayunos/tapas; posible consumo de pan precocido.<br>
+• 🍽️ Restaurante El Molino — menú diario; posible consumo de pan precocido.<br>
+• 🏨 Hotel Centro — desayunos/hotelería; posible consumo de pan precocido.<br><br>
+<b>Recomendación</b><br>
+Priorizar los negocios con encaje más claro con el reparto y validar la necesidad real durante el contacto.<br><br>
+<small>Son oportunidades de demostración, no ventas ni necesidades confirmadas.</small>`;
+if(x.includes('pendientes de primer contacto')||x.includes('primer contacto'))return `<b>Clientes potenciales pendientes de primer contacto</b><br>
+• 🍽️ Restaurante El Molino<br>
+• 🍽️ Restaurante Sol y Sombra<br>
+• 🏨 Hotel Centro<br>
+• 🛒 Alimentación Romero<br>
+• 🍞 Panadería Sierra<br><br>
+<b>Siguiente paso recomendado</b><br>
+Empezar por los clientes potenciales con prioridad más alta y registrar el resultado del primer contacto.<br><br>
+<small>La demo no tiene un historial real de contactos. Esta lista refleja los registros que figuran como pendientes de primer contacto en los datos de demostración.</small>`;
+if(x.includes('organizar')&&x.includes('visitas'))return `<b>Propuesta de ruta para hoy</b><br>
+1. ☕ Café Estación — 1,5 km<br>
+2. 🍽️ Bar La Plaza — 2,1 km<br>
+3. 🍽️ Restaurante El Molino — 3,4 km<br><br>
+<b>Recomendación</b><br>
+Empezaría por estos tres negocios del Centro y confirmaría la ruta antes de salir.<br><br>
+<small>Es una propuesta basada en los datos de demostración disponibles.</small>`;
+
+if(x.includes('visitar')&&x.includes('clientes'))return `<b>Clientes que podría tener sentido visitar</b><br>
+☕ Café Estación — 1,5 km — prioridad alta<br>
+🍽️ Bar La Plaza — 2,1 km — prioridad alta<br>
+🍽️ Restaurante El Molino — 3,4 km — prioridad alta<br><br>
+<b>Recomendación</b><br>
+Empezaría por Café Estación, después Bar La Plaza y luego Restaurante El Molino, porque los tres están en el Centro y este orden reduce desplazamientos dentro de la zona.<br><br>
+<small>Es una recomendación basada en los datos de demostración disponibles.</small>`;
+if(x.includes('visitar'))return `<b>Clientes potenciales para visitar primero</b><br>
+☕ Café Estación — 1,5 km — prioridad alta<br>
+🍽️ Bar La Plaza — 2,1 km — prioridad alta<br>
+🍽️ Restaurante El Molino — 3,4 km — prioridad alta<br><br>
+<b>Recomendación</b><br>
+Empezaría por Café Estación, después Bar La Plaza y luego Restaurante El Molino, porque los tres están en el Centro y este orden reduce desplazamientos dentro de la zona.<br><br>
+<small>Es una recomendación basada en los datos de demostración disponibles.</small>`;
+if(x.includes('llamar')&&x.includes('hoy'))return `<b>Datos disponibles</b><br>
+☕ Café Estación — prioridad alta<br>
+🍽️ Bar La Plaza — prioridad alta<br>
+🍽️ Restaurante El Molino — prioridad alta<br><br>
+<b>Recomendación</b><br>
+Revisar primero estos tres negocios del Centro y confirmar la ruta antes de salir.<br><br>
+<small>Estos datos son de demostración. En la versión conectada, AGAIDAN utilizará los datos reales autorizados del negocio.</small>`;
+if(x.includes('seguimiento'))return followups.length?`Hay ${followups.length} seguimiento(s) guardado(s) localmente.`:'No hay seguimientos guardados.';
+return `Puedo ayudarte con <b>clientes potenciales, visitas, rutas, llamadas, seguimientos, clientes y oportunidades</b>.`;
+}
+function ask(){let i=document.getElementById('question'),q=i.value.trim();if(!q)return;let c=document.getElementById('chat');c.insertAdjacentHTML('beforeend',`<div class="msg me">${esc(q)}</div><div class="msg">${commercialAnswer(q)}</div>`);i.value='';c.scrollTop=c.scrollHeight;}
+
+function askFinance(q){const x=q.toLowerCase(),d=ownerInsightData();let a='';if(x.includes('camión')&&x.includes('ventas')||x.includes('camion')&&x.includes('ventas')){const g={};d.sales.forEach(v=>{if(v.truck)g[v.truck]=(g[v.truck]||0)+(Number(v.amount)||0)});a=Object.keys(g).length?'<b>Ventas por camión:</b><br>'+Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'🚚 '+esc(k)+' — <b>'+moneyLocal(v)+'</b>').join('<br>'):'No hay ventas asignadas a camiones.';}else if(x.includes('ruta')&&x.includes('margen')){const rows=Object.entries(d.routeMap).filter(([k,v])=>v.sales||v.expenses);a=rows.length?'<b>Ganancia calculada por ruta:</b><br>'+rows.map(([k,v])=>'🛣️ '+esc(k)+' — ventas '+moneyLocal(v.sales)+' · gastos '+moneyLocal(v.expenses)+' · margen <b>'+moneyLocal(v.sales-v.expenses)+'</b>').join('<br>'):'No hay datos suficientes por ruta.';}else if(x.includes('más gastos')||x.includes('mas gastos')){const rows=Object.entries(d.routeMap).filter(([k,v])=>v.expenses).sort((a,b)=>b[1].expenses-a[1].expenses);a=rows.length?'<b>Rutas con más gastos registrados:</b><br>'+rows.slice(0,5).map(([k,v])=>'🛣️ '+esc(k)+' — <b>'+moneyLocal(v.expenses)+'</b>').join('<br>'):'No hay gastos registrados.';}else if(x.includes('combustible')){a=d.entries.length?'<b>Combustible registrado:</b> '+moneyLocal(d.entries.reduce((z,v)=>z+(Number(v.fuelAmount)||0),0))+'.<br><br><span class="muted">Solo incluye registros confirmados por conductores.</span>':'Todavía no hay combustible registrado por conductores.';}else if(x.includes('pendiente')||x.includes('cobrar')){a=(d.sales.length||d.collections.length)?'<b>Pendiente según registros:</b> '+moneyLocal(d.pending)+'.<br><br><span class="muted">Ventas: '+moneyLocal(d.salesTotal)+' · Cobros registrados: '+moneyLocal(d.colTotal)+'. No es una deuda verificada.</span>':'Todavía no hay ventas/cobros suficientes para calcularlo.';}else a='Selecciona una pregunta financiera concreta. AGAIDAN calculará la respuesta con los registros disponibles y no con cifras fijas de demostración.';document.getElementById('financeAnswer').innerHTML=a;}
+function ownerQuick(q){const i=document.getElementById('ownerQuestion');if(i){i.value=q;askOwner();}}
+function askOwner(){
+ const i=document.getElementById('ownerQuestion'),q=(i?.value||'').trim(),x=q.toLowerCase();if(!q)return;
+ const sales=salesEntries(),collections=collectionEntries(),entries=driverEntries(),notes=deliveryNoteEntries();
+ const salesTotal=sales.reduce((a,v)=>a+(Number(v.amount)||0),0),colTotal=collections.reduce((a,v)=>a+(Number(v.amount)||0),0),expTotal=entries.reduce((a,v)=>a+(Number(v.fuelAmount)||0)+(Number(v.tolls)||0)+(Number(v.parking)||0)+(Number(v.repairs)||0)+(Number(v.other)||0),0);
+ const pending=Math.max(0,salesTotal-colTotal),margin=salesTotal-expTotal,hasAny=!!(sales.length||collections.length||entries.length||notes.length);
+ let a='';
+ if(x.includes('cómo está mi negocio')||x.includes('como esta mi negocio')||x.includes('estado del negocio')){
+   a=hasAny?'<b>Estado con datos registrados:</b><br>• Ventas: '+moneyLocal(salesTotal)+'<br>• Cobros registrados: '+moneyLocal(colTotal)+'<br>• Gastos: '+moneyLocal(expTotal)+'<br>• Ganancia calculada: '+moneyLocal(margin)+'<br>• Pendiente de cobro: '+moneyLocal(pending)+'<br><br><span class="muted">El pendiente se calcula como ventas registradas menos cobros registrados. No significa que AGAIDAN haya verificado una deuda real. Este resumen solo usa registros guardados en AGAIDAN.</span>':'<b>Todavía no hay suficientes datos reales para resumir el negocio.</b><br><br>Registra ventas/albaranes, cobros o gastos de conductores para empezar a analizarlo.';
+ } else if(x.includes('qué debería revisar hoy')||x.includes('que deberia revisar hoy')||x.includes('qué revisar hoy')||x.includes('que revisar hoy')){
+   const items=[];
+   if(pending>0)items.push('💳 Revisar cobros pendientes: <b>'+moneyLocal(pending)+'</b>.');
+   if(expTotal>0)items.push('🚚 Revisar gastos registrados: <b>'+moneyLocal(expTotal)+'</b>.');
+   const withoutProduct=sales.filter(v=>!String(v.product||'').trim()).length;
+   if(withoutProduct)items.push('📦 Hay <b>'+withoutProduct+'</b> venta(s) sin producto indicado; completar ese dato mejorará el análisis de Productos.');
+   const unassigned=sales.filter(v=>!v.truck||!v.route).length;
+   if(unassigned)items.push('🛣️ Hay <b>'+unassigned+'</b> venta(s) sin camión o ruta asignados; completar esos datos mejorará el análisis por ruta.');
+   a=items.length?'<b>Lo que revisaría hoy:</b><br>'+items.join('<br>'):'No detecto un punto concreto con los datos actuales. Si quieres análisis más útil, faltan registros de ventas, cobros, gastos o asignaciones de ruta.';
+ } else if(x.includes('cuánto he vendido')||x.includes('cuanto he vendido')){
+   a=sales.length?'<b>Ventas:</b> '+moneyLocal(salesTotal)+'.<br><br><span class="muted">Solo incluye ventas introducidas y guardadas en AGAIDAN.</span>':'Todavía no hay ventas reales registradas.';
+ } else if(x.includes('cuánto he gastado')||x.includes('cuanto he gastado')){
+   a=entries.length?'<b>Gastos registrados:</b> '+moneyLocal(expTotal)+'.<br><br><span class="muted">Incluye combustible y otros gastos confirmados por los conductores.</span>':'Todavía no hay gastos reales registrados por conductores.';
+ } else if(x.includes('margen')){
+   a=hasAny&&sales.length?'<b>Ganancia calculada:</b> '+moneyLocal(margin)+' = ventas registradas menos gastos registrados.<br><br><span class="muted">Si faltan gastos o ventas, el margen puede estar incompleto.</span>':'No hay datos suficientes para calcular el margen real.';
+ } else if((x.includes('pendiente de cobro')||x.includes('pendiente')&&x.includes('cobro')||x.includes('cobros'))){
+   a=(sales.length||collections.length)?'<b>Pendiente de cobro:</b> '+moneyLocal(pending)+' = ventas registradas menos cobros registrados.<br><br><span class="muted">Cobros registrados: '+moneyLocal(colTotal)+'. El pendiente no implica una deuda verificada; solo refleja ventas sin cobro registrado. Para un desglose por cliente hacen falta ventas y cobros asociados al mismo cliente.</span>':'Todavía no hay ventas/cobros reales suficientes para calcularlo.';
+ } else if(x.includes('clientes me deben')||x.includes('quienes me deben')||x.includes('qué clientes deben')||x.includes('que clientes deben')){
+   const names=[...new Set(sales.map(v=>v.client).filter(Boolean))];
+   if(!names.length)a='Todavía no hay ventas registradas por cliente.';
+   else{const rows=names.map(n=>{const sv=sales.filter(v=>v.client===n).reduce((z,v)=>z+(Number(v.amount)||0),0),cv=collections.filter(v=>v.client===n).reduce((z,v)=>z+(Number(v.amount)||0),0),p=Math.max(0,sv-cv);return p?'👤 '+esc(n)+' — <b>'+moneyLocal(p)+'</b> pendiente':''}).filter(Boolean);a=rows.length?'<b>Clientes con saldo pendiente según los registros:</b><br>'+rows.join('<br>'):'No hay saldos pendientes según los registros.';}
+ } else if(x.includes('camión')&&x.includes('venta')||x.includes('camion')&&x.includes('venta')){
+   const g={};sales.forEach(v=>{if(v.truck)g[v.truck]=(g[v.truck]||0)+(Number(v.amount)||0)});a=Object.keys(g).length?'<b>Ventas por camión:</b><br>'+Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'🚚 '+esc(k)+' — <b>'+moneyLocal(v)+'</b>').join('<br>'):'No hay ventas asignadas a camiones.';
+ } else if(x.includes('ruta')&& (x.includes('margen')||x.includes('cómo van')||x.includes('como van')||x.includes('ventas'))){
+   const configured=getTruckConfig();
+   const truckRouteMap={};
+   configured.forEach(t=>{const tn=String(t?.name||t?.truck||'').trim();if(!tn)return;const raw=String(t?.route||t?.habitualRoute||'').trim();const m=tn.match(/(\d+)/);truckRouteMap[tn]=/^ruta\s*\d+/i.test(raw)?raw:('Ruta '+(m?m[1]:'sin configurar'));});
+   const canonicalRoute=v=>{const truck=String(v?.truck||'').trim();return truckRouteMap[truck]||('Ruta '+((truck.match(/(\d+)/)||[])[1]||'sin configurar'));};
+   const g={};sales.forEach(v=>{const r=canonicalRoute(v);g[r]=(g[r]||{sales:0,expenses:0});g[r].sales+=(Number(v.amount)||0)});entries.forEach(v=>{const r=canonicalRoute(v);if(!g[r])g[r]={sales:0,expenses:0};g[r].expenses+=(Number(v.fuelAmount)||0)+(Number(v.tolls)||0)+(Number(v.parking)||0)+(Number(v.repairs)||0)+(Number(v.other)||0)});
+   const rows=Object.entries(g).filter(([k,v])=>v.sales||v.expenses);a=rows.length?'<b>Rutas con datos registrados:</b><br>'+rows.map(([k,v])=>'🛣️ '+esc(k)+' — ventas <b>'+moneyLocal(v.sales)+'</b> · gastos <b>'+moneyLocal(v.expenses)+'</b> · margen calculado <b>'+moneyLocal(v.sales-v.expenses)+'</b>').join('<br>'):'Todavía no hay datos suficientes por ruta.';
+ } else if(x.includes('combustible')){
+   a=entries.length?'<b>Combustible registrado:</b> '+moneyLocal(entries.reduce((z,v)=>z+(Number(v.fuelAmount)||0),0))+'.<br><br><span class="muted">Solo incluye registros confirmados por conductores.</span>':'Todavía no hay combustible registrado por conductores.';
+ } else if(x.includes('clientes')&&x.includes('generan')&&x.includes('venta')){
+   const g={};sales.forEach(v=>{if(v.client)g[v.client]=(g[v.client]||0)+(Number(v.amount)||0)});a=Object.keys(g).length?'<b>Ventas por cliente:</b><br>'+Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'👤 '+esc(k)+' — <b>'+moneyLocal(v)+'</b>').join('<br>'):'Todavía no hay ventas registradas por cliente.';
+ } else if(x.includes('producto')&&(x.includes('vendo')||x.includes('venta')||x.includes('van'))){
+   const g={};sales.forEach(v=>{if(v.product){if(!g[v.product])g[v.product]={amount:0,boxes:0};g[v.product].amount+=(Number(v.amount)||0);g[v.product].boxes+=(Number(v.boxes)||0)}});a=Object.keys(g).length?'<b>Ventas por variedad:</b><br>'+Object.entries(g).sort((a,b)=>b[1].boxes-a[1].boxes).map(([k,v])=>'📦 '+esc(k)+' — <b>'+v.boxes+' caja(s)</b> · '+moneyLocal(v.amount)).join('<br>'):'Todavía no hay ventas registradas por variedad.';
+ } else if(x.includes('qué información me falta')||x.includes('que informacion me falta')||x.includes('qué datos me faltan')||x.includes('que datos me faltan')){
+   const missing=[];if(!sales.length)missing.push('ventas/albaranes confirmados');if(!collections.length)missing.push('cobros registrados');if(!entries.length)missing.push('gastos de conductores');if(sales.length&&!sales.some(v=>v.product))missing.push('productos asociados a las ventas');if(sales.length&&!sales.some(v=>v.truck&&v.route))missing.push('asignación completa de camión y ruta');
+   a=missing.length?'<b>Datos que faltan para mejorar el análisis:</b><br>• '+missing.join('<br>• ')+'<br><br><span class="muted">AGAIDAN no completará estos datos por su cuenta.</span>':'Los principales datos operativos ya tienen registros. A medida que aumente el historial, el análisis será más útil.';
+ } else if(/cuántas cajas|cajas vend|cajas por cliente|cajas por ruta|variedades.*cliente|qué variedad/.test(x)){const all=salesEntries();if(!all.length)a='Todavía no hay ventas/albaranes reales con cajas registrados.';else if(/ruta/.test(x)){const g={};all.forEach(v=>{const r=ownerRouteKey(v);g[r]=(g[r]||0)+(Number(v.boxes)||0)});a='<b>Cajas por ruta:</b><br>'+Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'🛣️ '+esc(k)+' — <b>'+v+' caja(s)</b>').join('<br>')}else if(/cliente/.test(x)){const g={};all.forEach(v=>{if(v.client)g[v.client]=(g[v.client]||0)+(Number(v.boxes)||0)});a='<b>Cajas por cliente:</b><br>'+Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'👤 '+esc(k)+' — <b>'+v+' caja(s)</b>').join('<br>')}else{const total=all.reduce((z,v)=>z+(Number(v.boxes)||0),0);a='<b>Total de cajas registradas:</b> '+total+' caja(s).'}} else if(x.includes('qué debería revisar hoy')||x.includes('que debería revisar hoy')||x.includes('que deberia revisar hoy')||x.includes('qué revisar hoy')||x.includes('que revisar hoy')){const d=ownerInsightData();a=d.today.length?'<b>Lo que deberías revisar hoy:</b><br>'+d.today.map(i=>'• '+i.title+' — '+i.text).join('<br>'):'No detecto un punto concreto con los datos actuales.';} else if(x.includes('qué variedad vendo más')||x.includes('que variedad vendo mas')||x.includes('variedad vendo más')||x.includes('variedad vendo mas')){const g={};sales.forEach(v=>{const p=String(v.product||'').trim();if(p)g[p]=(g[p]||0)+(Number(v.boxes)||0)});const rows=Object.entries(g).sort((a,b)=>b[1]-a[1]);a=rows.length?'<b>Variedades por cajas:</b><br>'+rows.map(([p,n])=>'📦 '+esc(p)+' — <b>'+n+' caja(s)</b>').join('<br>'):'No hay ventas con variedad y cajas suficientes.';} else if(x.includes('cómo van mis rutas')||x.includes('como van mis rutas')||x.includes('cómo van las rutas')||x.includes('como van las rutas')){const d=ownerInsightData();const rows=Object.entries(d.routeMap).filter(([k,v])=>v.sales||v.expenses);a=rows.length?'<b>Rutas:</b><br>'+rows.map(([r,v])=>'🛣️ '+esc(r)+' — ventas '+moneyLocal(v.sales)+' · gastos '+moneyLocal(v.expenses)+' · margen calculado '+moneyLocal(v.sales-v.expenses)).join('<br>'):'Todavía no hay datos suficientes por ruta.';} else if(/llamar|cliente potencial|clientes potenciales|oportunidad|oportunidades|visitar|visitas|cerca|primer contacto|organizar.*visitas|añadir.*ruta|ruta.*visita|seguimiento/.test(x)){ a=commercialAnswer(q); } else a='Puedo ayudarte con clientes, cajas, variedades, ventas, gastos, margen, cobros, camiones, rutas y productos. Si falta información, te lo indicaré en lugar de inventarla.';
+ const c=document.getElementById('ownerChat');c.insertAdjacentHTML('beforeend',`<div class="msg me">${esc(q)}</div><div class="msg">${a}</div>`);i.value='';c.scrollTop=c.scrollHeight;
+}
+function getTruckConfig(){try{return JSON.parse(agaStorage.getItem('agaidan-trucks')||'[]')}catch(e){return []}}
+function saveTruckConfig(){const input=document.getElementById('truckCount');if(!input)return;const cards=[...document.querySelectorAll('.truck-config-card')];const trucks=cards.map((card,i)=>({id:i+1,name:'Camión '+(i+1),plate:card.querySelector('.truck-plate')?.value.trim()||'',driver:card.querySelector('.truck-driver')?.value.trim()||'',route:card.querySelector('.truck-route')?.value.trim()||''}));agaStorage.setItem('agaidan-trucks',JSON.stringify(trucks));updateTruckSelects(trucks);const st=document.getElementById('truckConfigStatus');if(st)st.textContent='✓ Configuración de camiones guardada en este navegador.'}
+function previewTrucks(){const input=document.getElementById('truckCount'),box=document.getElementById('truckPreview');if(!input||!box)return;let n=Math.max(0,Math.min(50,parseInt(input.value||'0',10)||0));const saved=getTruckConfig();box.innerHTML=n?Array.from({length:n},(_,i)=>{const t=saved[i]||{};return `<div class="truck-config-card" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:13px"><b>🚚 Camión ${i+1}</b><div class="form" style="margin-top:9px;display:grid;gap:7px"><label>Matrícula<input class="truck-plate" value="${escAttr(t.plate||'')}" placeholder="Ej. 1234 ABC"></label><label>Conductor asignado<input class="truck-driver" value="${escAttr(t.driver||'')}" placeholder="Nombre del conductor"></label><label>Ruta habitual<input class="truck-route" value="${escAttr(t.route||'')}" placeholder="Ej. Ruta Toledo Norte"></label></div></div>`}).join(''):'<div class="small muted">Indica el número de camiones para configurarlos.</div>';const st=document.getElementById('truckConfigStatus');if(st&&saved.length)st.textContent=`Hay ${saved.length} camión(es) guardado(s). Puedes modificar la configuración y volver a guardar.`}
+function escAttr(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function loadTruckConfig(){const saved=getTruckConfig();const input=document.getElementById('truckCount');if(!input)return;if(saved.length)input.value=saved.length;previewTrucks();updateTruckSelects(saved);syncDriverAssignment();setDriverDateToday()}
+function syncDriverAssignment(){const trucks=getTruckConfig(),sel=document.getElementById('driverTruck'),name=document.getElementById('driverName'),route=document.getElementById('driverRoute');if(!sel)return;const t=trucks.find(x=>x.driver&&x.driver.trim())||trucks[0];if(t){sel.value=t.name||'';if(name){name.value=t.driver||'';name.placeholder=t.driver?'Conductor asignado desde la configuración':'Conductor no asignado todavía';}if(route){route.value=t.route||'';}}else{sel.value='';if(name){name.value='';name.placeholder='Conductor no asignado';}if(route)route.value='';}}
+function setDriverDateToday(){const el=document.getElementById('driverDate');if(el&&!el.value)el.value=new Date().toISOString().slice(0,10);syncDriverAssignment()}
+function updateTruckSelects(trucks){syncDriverAssignment();}
+function loadCompany(){['companyName','tradeName','deliveryZone','companyPhone','valueProp'].forEach(k=>document.getElementById(k).value=company[k]||'');document.querySelectorAll('.business-product').forEach(el=>el.checked=(company.products||[]).includes(el.value));document.querySelectorAll('.business-customer').forEach(el=>el.checked=(company.customers||[]).includes(el.value));document.getElementById('truckCount').value=company.truckCount??0;previewTrucks();}
+function saveCompany(){saveTruckConfig();company={companyName:document.getElementById('companyName').value.trim(),tradeName:document.getElementById('tradeName').value.trim(),deliveryZone:document.getElementById('deliveryZone').value.trim(),companyPhone:document.getElementById('companyPhone').value.trim(),valueProp:document.getElementById('valueProp').value.trim(),products:[...document.querySelectorAll('.business-product:checked')].map(el=>el.value),customers:[...document.querySelectorAll('.business-customer:checked')].map(el=>el.value),truckCount:Math.max(0,Math.min(50,parseInt(document.getElementById('truckCount').value||'0',10)||0))};agaStorage.setItem('agaidan-company',JSON.stringify(company));previewTrucks();populateSaleTrucks();populateDeliveryNoteTrucks();renderOwnerOperationalFinance();renderHome();alert('Configuración guardada localmente.');}
+
+let agaPendingCSV=null;
+function agaParseCSV(text){
+  text=String(text||'').replace(/^\uFEFF/,'');
+  const firstLine=(text.split(/\r?\n/,1)[0]||'');let quotedHeader=false,counts={',':0,';':0,'\t':0};
+  for(let i=0;i<firstLine.length;i++){const c=firstLine[i];if(c==='"'&&firstLine[i+1]==='"'&&quotedHeader){i++;continue;}if(c==='"'){quotedHeader=!quotedHeader;continue;}if(!quotedHeader&&Object.prototype.hasOwnProperty.call(counts,c))counts[c]++;}
+  const delimiter=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
+  const rows=[]; let row=[], cell='', quoted=false;
+  for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];
+    if(c==='"'&&quoted&&n==='"'){cell+='"';i++;continue;}
+    if(c==='"'){quoted=!quoted;continue;}
+    if(c===delimiter&&!quoted){row.push(cell.trim());cell='';continue;}
+    if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&n==='\n')i++;row.push(cell.trim());cell='';if(row.some(x=>x!==''))rows.push(row);row=[];continue;}
+    cell+=c;
+  }
+  if(cell!==''||row.length){row.push(cell.trim());if(row.some(x=>x!==''))rows.push(row)}
+  return rows;
+}
+function agaDetectCSV(headers){const h=headers.map(x=>String(x).toLowerCase());
+  const has=(...a)=>a.some(x=>h.some(v=>v.includes(x)));
+  if(has('albaran','albarán','numero albaran','nº albaran'))return 'albaranes';
+  if(has('cobro','cobrado','pago'))return 'cobros';
+  if(has('albaran','albarán','numero albaran','nº albaran'))return 'albaranes';
+  if(has('venta','importe venta','facturacion','facturación','cajas','precio caja','precio_caja'))return 'ventas';
+  if(has('producto','articulo','artículo','variedad'))return 'productos';
+  if(has('cliente','negocio','empresa','nombre'))return 'clientes';
+  return 'ventas';
+}
+function previewCSV(e){const f=e.target.files?.[0],box=document.getElementById('csvPreview'),actions=document.getElementById('csvImportActions'),summary=document.getElementById('csvImportSummary'),detect=document.getElementById('csvDetect');
+  agaPendingCSV=null; if(actions)actions.style.display='none'; if(!f){box.innerHTML='';return}
+  const reader=new FileReader(); reader.onload=()=>{const rows=agaParseCSV(String(reader.result||''));
+    if(rows.length<2){box.innerHTML='<div class="note">⚠️ El CSV no contiene suficientes filas para importar.</div>';return}
+    const headers=rows[0],data=rows.slice(1).filter(r=>r.some(Boolean)),type=agaDetectCSV(headers); const sel=document.getElementById('csvType');if(sel&&sel.value==='auto')sel.value='auto';
+    if(detect)detect.textContent='Detectado automáticamente: '+type+' · '+data.length+' registro(s).';
+    const preview=data.slice(0,5).map(r=>'<tr>'+headers.map((_,i)=>'<td style="padding:7px;border-top:1px solid #e5e7eb">'+esc(r[i]||'')+'</td>').join('')+'</tr>').join('');
+    box.innerHTML='<div class="card"><b>👀 Vista previa</b><p class="small muted">'+esc(headers.join(' · '))+'</p><div style="overflow:auto"><table style="width:100%;border-collapse:collapse"><tbody>'+preview+'</tbody></table></div><p class="small muted">Mostrando hasta 5 filas. El archivo completo se conserva solo en memoria hasta confirmar.</p></div>';
+    if(actions)actions.style.display='block'; if(summary)summary.textContent='Se van a importar '+data.length+' registro(s) como '+type+'. Los datos quedarán marcados como importados y separados de la demo.';
+    agaPendingCSV={headers,data,fileName:f.name,type};
+  }; reader.readAsText(f);
+}
+function agaCSVReview(){
+  if(!agaPendingCSV)return;
+  const type=(document.getElementById('csvType')?.value||'auto')==='auto'?agaPendingCSV.type:document.getElementById('csvType').value;
+  const headers=agaPendingCSV.headers.map(h=>String(h).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+  const required={clientes:['cliente','nombre','negocio','empresa'],ventas:['cliente','importe','venta','cajas'],productos:['producto','variedad'],cobros:['cliente','importe','cobro','pago'],albaranes:['cliente','albaran','albarán','cajas']}[type]||[];
+  const missing=required.filter(k=>!headers.some(h=>h.includes(k)));
+  const rows=agaPendingCSV.data;
+  const emptyRows=rows.filter(r=>r.every(v=>String(v||'').trim()==='')).length;
+  const warning=missing.length?'<div class="note">⚠️ <b>Revisar antes de guardar:</b> no se ha encontrado una columna que permita comprobar '+esc(missing.join(', '))+'. AGAIDAN no inventará esos datos.</div>':'<div class="note">✅ <b>Revisión básica correcta:</b> se han encontrado columnas compatibles para '+esc(type)+'. Revisa la vista previa antes de confirmar.</div>';
+  const result=document.getElementById('csvImportResult');
+  if(result)result.innerHTML=warning+'<p class="small muted">Filas recibidas: '+rows.length+' · Filas vacías: '+emptyRows+'.</p>';
+}
+function confirmCSVImport(){if(!agaPendingCSV)return;const selected=document.getElementById('csvType')?.value||'auto';const type=selected==='auto'?agaPendingCSV.type:selected;const key='agaidan-imported-'+type;let old=[];try{old=JSON.parse(agaStorage.getItem(key)||'[]')}catch(e){};
+  const records=agaPendingCSV.data.map(r=>{const o={source:'imported',importedAt:new Date().toISOString()};agaPendingCSV.headers.forEach((h,i)=>o[String(h).trim()]=r[i]||'');const lower={};Object.keys(o).forEach(k=>lower[k.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')]=o[k]);if(lower.cajas!==undefined) o.boxes=Number(String(lower.cajas).replace(',','.'))||0;if(lower['precio/caja']!==undefined)o.pricePerBox=Number(String(lower['precio/caja']).replace(',','.'))||0;else if(lower.preciocaja!==undefined)o.pricePerBox=Number(String(lower.preciocaja).replace(',','.'))||0;if(lower.variedad!==undefined)o.product=lower.variedad;if(lower.producto!==undefined&&!o.product)o.product=lower.producto;return o});
+  agaStorage.setItem(key,JSON.stringify(old.concat(records))); renderImportedDataSummary();renderImportedClientsMain();renderSegments();renderSales();renderCollections();renderFinanceKpis();renderFinanceDetails();renderOwnerOperationalFinance();renderProductsReal();renderRealClients(); const res=document.getElementById('csvImportResult');if(res)res.innerHTML='<div class="note"><b>✅ Importación completada</b><br>'+records.length+' registro(s) guardado(s) como datos importados de '+type+'.<br><span class="small muted">La demo y los datos importados siguen separados.</span></div>';
+  document.getElementById('csvImportActions').style.display='none';document.getElementById('csvFile').value='';agaPendingCSV=null; if(typeof renderHome==='function')renderHome(); if(typeof agaidanRenderInactive==='function')agaidanRenderInactive(); if(typeof agaidanRenderAnalytics==='function')agaidanRenderAnalytics();
+}
+function cancelCSVImport(){agaPendingCSV=null;document.getElementById('csvImportActions').style.display='none';document.getElementById('csvPreview').innerHTML='';document.getElementById('csvFile').value='';}
+function renderImportedDataSummary(){
+  const box=document.getElementById('importedDataSummary'); if(!box)return;
+  const types=[['clientes','👥 Clientes'],['ventas','💶 Ventas'],['productos','📦 Productos'],['cobros','💳 Cobros'],['albaranes','📄 Albaranes']];
+  const data={}; types.forEach(([k])=>{try{data[k]=JSON.parse(agaStorage.getItem('agaidan-imported-'+k)||'[]')}catch(e){data[k]=[]}});
+  const total=types.reduce((n,[k])=>n+data[k].length,0);
+  if(!total){box.innerHTML='';return;}
+  let html='<div class="card"><h2>📊 Datos importados</h2><p class="muted">Estos registros se han guardado localmente y permanecen separados de los datos de demostración.</p><div class="grid cards">';
+  types.forEach(([k,label])=>{html+='<div class="card"><b>'+label+'</b><div class="big">'+data[k].length+'</div><span class="small muted">registro(s) importado(s)</span></div>'});
+  html+='</div>';
+  if(data.clientes.length){
+    const rows=data.clientes.slice(-10).map(r=>{const nombre=r.nombre||r.Nombre||r.cliente||r.Cliente||r.negocio||r.Negocio||r.empresa||r.Empresa||'Sin nombre'; const tipo=r.tipo||r.Tipo||''; const zona=r.zona||r.Zona||''; const tel=r.telefono||r.Teléfono||r.telefono||''; return '<tr><td>'+esc(nombre)+'</td><td>'+esc(tipo)+'</td><td>'+esc(zona)+'</td><td>'+esc(tel)+'</td></tr>'}).join('');
+    html+='<h3 style="margin-top:18px">👥 Clientes importados</h3><div style="overflow:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px">Nombre</th><th style="text-align:left;padding:8px">Tipo</th><th style="text-align:left;padding:8px">Zona</th><th style="text-align:left;padding:8px">Teléfono</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+    if(data.clientes.length>10)html+='<p class="small muted">Mostrando los últimos 10 clientes importados de '+data.clientes.length+'.</p>';
+  }
+  html+='</div>'; box.innerHTML=html;
+}
+function exportData(){let data={company,route,followups,trucks:getTruckConfig(),sales:salesEntries(),collections:collectionEntries(),driverEntries:driverEntries(),deliveryNotes:deliveryNoteEntries(),imported:{clientes:JSON.parse(agaStorage.getItem('agaidan-imported-clientes')||'[]'),ventas:JSON.parse(agaStorage.getItem('agaidan-imported-ventas')||'[]'),productos:JSON.parse(agaStorage.getItem('agaidan-imported-productos')||'[]'),cobros:JSON.parse(agaStorage.getItem('agaidan-imported-cobros')||'[]'),albaranes:JSON.parse(agaStorage.getItem('agaidan-imported-albaranes')||'[]')},exportedAt:new Date().toISOString()};let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='agaidan-datos-locales.json';a.click();URL.revokeObjectURL(a.href);}
+function resetAll(){if(confirm('¿Restablecer los datos locales de AGAIDAN?')){agaStorage.removeItem('agaidan-route');agaStorage.removeItem('agaidan-followups');agaStorage.removeItem('agaidan-company');agaStorage.removeItem('agaidan-sales');agaStorage.removeItem('agaidan-collections');agaStorage.removeItem('agaidan-delivery-notes');agaStorage.removeItem('agaidan-driver-entries');agaStorage.removeItem('agaidan-trucks');['clientes','ventas','productos','cobros','albaranes'].forEach(k=>agaStorage.removeItem('agaidan-imported-'+k));route=[];followups=[];company={};renderHome();renderDynamicAlerts();alert('Datos locales restablecidos.');}}
+
+document.getElementById('question')?.addEventListener('keydown',e=>{if(e.key==='Enter')ask();});
+document.getElementById('ownerQuestion')?.addEventListener('keydown',e=>{if(e.key==='Enter')askOwner();});
+renderHome();renderProspects();initDriver();renderDriverFinance();renderOwnerOperationalFinance();renderFinanceKpis();renderSales();renderCollections();populateSaleTrucks();renderProductsReal();renderRealClients();renderImportedDataSummary();renderImportedClientsMain();renderSegments();document.getElementById("saleDate")?.setAttribute("value",todayISO());document.getElementById("collectionDate")?.setAttribute("value",todayISO());
+
+document.addEventListener('DOMContentLoaded',()=>{loadCompany();loadTruckConfig();populateSaleTrucks();renderSales();renderCollections();renderFinanceKpis();renderFinanceDetails();renderOwnerOperationalFinance();renderProductsReal();renderRealClients();renderImportedDataSummary();renderImportedClientsMain();renderSegments();populateSaleTrucks();const sd=document.getElementById('saleDate');if(sd&&!sd.value)sd.value=todayISO();const cd=document.getElementById('collectionDate');if(cd&&!cd.value)cd.value=todayISO();});
+</script>
+
+<script>
+function agaNumeric(v){ const n=Number(v); return Number.isFinite(n)?n:0; }
+function agaMoney(v){ return agaNumeric(v).toLocaleString('es-ES',{style:'currency',currency:'EUR'}); }
+
+function agaPopulateSelect(id, values, allLabel){
+  const el=document.getElementById(id); if(!el)return;
+  const old=el.value;
+  el.innerHTML='<option value="">'+allLabel+'</option>';
+  [...new Set(values.filter(Boolean))].sort().forEach(v=>{
+    const o=document.createElement('option'); o.value=v; o.textContent=v; el.appendChild(o);
+  });
+  if([...el.options].some(o=>o.value===old)) el.value=old;
+}
+
+function agaCurrentDeliveryNotes(){
+  try { return typeof deliveryNoteEntries==='function' ? deliveryNoteEntries() : []; }
+  catch(e){ return []; }
+}
+
+function canonicalDeliveryRoute(x){
+  let configured=[]; try{configured=getTruckConfig()||[]}catch(e){configured=[]}
+  const truck=String(x?.truck||'').trim();
+  const cfg=configured.find(t=>String(t?.name||t?.truck||'').trim()===truck);
+  const raw=String(cfg?.route||cfg?.habitualRoute||'').trim();
+  if(/^ruta\s*\d+/i.test(raw)) return raw;
+  const n=(truck.match(/(\d+)/)||[])[1];
+  return 'Ruta '+(n||'sin configurar');
+}
+
+function renderFinanceRouteSummary(){
+  const records=agaCurrentDriverRecords(), sales=agaCurrentFinanceSales();
+  const truckEl=document.getElementById('financeRouteTruckFilter'), routeEl=document.getElementById('financeRouteFilter');
+  const st=truckEl?.value||'', sr=routeEl?.value||'';
+
+  // AGAIDAN must use the route assigned/configured to the truck.
+  // A free-text city/zone in older conductor records is not treated as a route.
+  const configuredRoutes = {};
+  try {
+    const trucks = JSON.parse(agaStorage.getItem('agaidan-trucks') || '[]');
+    trucks.forEach(t=>{
+      const name=t.name || t.truck || t.id || '';
+      const route=t.route || t.habitualRoute || '';
+      if(name && route) configuredRoutes[String(name)] = String(route);
+    });
+  } catch(e){}
+
+  function normalizedRoute(x){
+    const truck=String(x?.truck||'');
+    const raw=String(x?.route||'');
+    return configuredRoutes[truck] || (/^ruta\b/i.test(raw) ? raw : '');
+  }
+
+  const rowsMap={};
+  [...records,...sales].forEach(x=>{
+    const truck=String(x?.truck||'');
+    const route=normalizedRoute(x);
+    if(!truck || !route) return;
+    const key=truck+'|'+route;
+    rowsMap[key] ||= {truck,route};
+  });
+
+  const trucks=[...new Set(Object.values(rowsMap).map(x=>x.truck))];
+  const routes=[...new Set(Object.values(rowsMap).map(x=>x.route))];
+  agaPopulateSelect('financeRouteTruckFilter',trucks,'Todos los camiones');
+  agaPopulateSelect('financeRouteFilter',routes,'Todas las rutas');
+  if(truckEl) truckEl.value=trucks.includes(st)?st:'';
+  if(routeEl) routeEl.value=routes.includes(sr)?sr:'';
+
+  const rows=Object.values(rowsMap)
+    .filter(x=>(!st||x.truck===st)&&(!sr||x.route===sr))
+    .map(x=>{
+      const rr=records.filter(y=>String(y?.truck||'')===x.truck && normalizedRoute(y)===x.route);
+      const ss=sales.filter(y=>String(y?.truck||'')===x.truck && normalizedRoute(y)===x.route);
+      const expenses=rr.reduce((a,y)=>a+agaNumeric(y.totalExpenses??y.expenses??0),0);
+      const fuel=rr.reduce((a,y)=>a+agaNumeric(y.fuelAmount??y.fuel??0),0);
+      const km=rr.reduce((a,y)=>a+agaNumeric(y.km??y.kmTotal??0),0);
+      const sale=ss.reduce((a,y)=>a+agaNumeric(y.amount),0);
+      return {...x,expenses,fuel,km,sales:sale,margin:sale-expenses};
+    });
+
+  const totalSales=rows.reduce((a,x)=>a+x.sales,0), totalExp=rows.reduce((a,x)=>a+x.expenses,0);
+  const totalFuel=rows.reduce((a,x)=>a+x.fuel,0), totalKm=rows.reduce((a,x)=>a+x.km,0);
+  const totals=document.getElementById('financeRouteTotals');
+  if(totals) totals.innerHTML='<strong>Selección:</strong> '+rows.length+' combinación(es) · Ventas '+agaMoney(totalSales)+' · Gastos '+agaMoney(totalExp)+' · Combustible '+agaMoney(totalFuel)+' · Margen '+agaMoney(totalSales-totalExp)+' · '+totalKm+' km';
+
+  const box=document.getElementById('financeRouteFilteredList');
+  if(box) box.innerHTML=rows.length
+    ? '<div class="table-wrap"><table><thead><tr><th>Camión</th><th>Ruta</th><th>Ventas</th><th>Gastos</th><th>Combustible</th><th>Km</th><th>Margen</th></tr></thead><tbody>'+
+      rows.map(x=>'<tr><td>🚚 '+x.truck+'</td><td>🛣️ '+x.route+'</td><td>'+agaMoney(x.sales)+'</td><td>'+agaMoney(x.expenses)+'</td><td>'+agaMoney(x.fuel)+'</td><td>'+x.km+'</td><td>'+agaMoney(x.margin)+'</td></tr>').join('')+
+      '</tbody></table></div>'
+    : '<div class="note">No hay una combinación de camión y ruta configurada para esta selección.</div>';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(()=>{ try{loadCompany();loadTruckConfig();renderHome();renderDeliveryNoteSummary();renderOwnerOperationalFinance();}catch(e){ try{renderHome();}catch(_e){} } },0);
+});
+
+function agaidanReadArray(key){try{return JSON.parse(agaStorage.getItem(key)||'[]')}catch(e){return[]}}
+function agaidanAllSales(){try{return typeof salesEntries==='function'?salesEntries():[]}catch(e){return[]}}
+function agaidanAllClients(){try{return typeof getImportedClients==='function'?getImportedClients():[]}catch(e){return[]}}
+function agaidanRenderInactive(){const box=document.getElementById('inactiveClientsList');if(!box)return;const sales=agaidanAllSales(),now=new Date(),map={};sales.forEach(x=>{const name=String(x.client||x.Cliente||x.cliente||'').trim();if(!name)return;const d=new Date(x.date||x.fecha||'');if(isNaN(d))return;(map[name]??=[]).push(d)});const rows=Object.entries(map).map(([name,ds])=>{ds.sort((a,b)=>b-a);return{name,count:ds.length,last:ds[0]}}).filter(x=>x.count>=2&&(now-x.last)/86400000>30);box.innerHTML=rows.length?rows.sort((a,b)=>a.last-b.last).map(x=>'<article class="cliente potencial"><span class="opp medium">PARA REVISAR</span><h3>'+esc(x.name)+'</h3><p>'+x.count+' compras registradas · última compra: '+esc(x.last.toISOString().slice(0,10))+'</p><button class="button secondary" onclick="openClient('+JSON.stringify(x.name)+')">Revisar</button></article>').join(''):'<div class="empty">No hay clientes con datos suficientes para detectar una posible pérdida de actividad.</div>'}
+function agaidanRenderAnalytics(){const box=document.getElementById('analyticsSummary'),q=document.getElementById('analyticsQuality'),cl=document.getElementById('analyticsClients');if(!box)return;const sales=agaidanAllSales(),clients=agaidanAllClients(),products=agaidanReadArray('agaidan-imported-productos'),collections=agaidanReadArray('agaidan-imported-cobros'),albaranes=agaidanReadArray('agaidan-imported-albaranes');const withProduct=sales.filter(x=>String(x.product||x.variedad||x.producto||'').trim()).length,withBoxes=sales.filter(x=>Number(x.boxes??x.cajas)>0).length,withRoute=sales.filter(x=>String(x.route||x.ruta||'').trim()||String(x.truck||x.camion||'').trim()).length;box.innerHTML='<div class="card"><div class="muted">Clientes</div><div class="big">'+clients.length+'</div></div><div class="card"><div class="muted">Ventas</div><div class="big">'+sales.length+'</div></div><div class="card"><div class="muted">Cajas conocidas</div><div class="big">'+sales.reduce((n,x)=>n+(Number(x.boxes??x.cajas)||0),0)+'</div></div><div class="card"><div class="muted">Variedades</div><div class="big">'+new Set(sales.map(x=>String(x.product||x.variedad||x.producto||'').trim()).filter(Boolean)).size+'</div></div>';const pct=(n,d)=>d?Math.round(n/d*100):0;q.innerHTML='<p>Ventas con variedad: <b>'+pct(withProduct,sales.length)+'%</b> ('+withProduct+'/'+sales.length+').</p><p>Ventas con cajas: <b>'+pct(withBoxes,sales.length)+'%</b> ('+withBoxes+'/'+sales.length+').</p><p>Ventas con ruta o camión: <b>'+pct(withRoute,sales.length)+'%</b> ('+withRoute+'/'+sales.length+').</p><p>Otros datos importados: <b>'+products.length+'</b> productos · <b>'+collections.length+'</b> cobros · <b>'+albaranes.length+'</b> albaranes.</p>';cl.innerHTML='<p>Clientes con actividad registrada: <b>'+new Set(sales.map(x=>String(x.client||x.Cliente||x.cliente||'').trim()).filter(Boolean)).size+'</b>.</p><p class="muted">Estos datos sirven para aprender qué información está llegando al piloto y dónde faltan datos.</p>'}
+
+/* AGAIDAN · Centro de documentos del piloto */
+const AGA_DOC_DB='agaidan-documents-db', AGA_DOC_STORE='documents';
+function agaOpenDocDB(){return new Promise((resolve,reject)=>{if(!window.indexedDB){reject(new Error('IndexedDB no disponible'));return}const req=indexedDB.open(AGA_DOC_DB,1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(AGA_DOC_STORE)){const st=db.createObjectStore(AGA_DOC_STORE,{keyPath:'id',autoIncrement:true});st.createIndex('createdAt','createdAt')}};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+async function agaSaveDocument(file){const db=await agaOpenDocDB();return new Promise((resolve,reject)=>{const tx=db.transaction(AGA_DOC_STORE,'readwrite'),st=tx.objectStore(AGA_DOC_STORE);const rec={name:file.name,size:file.size,type:file.type||'application/octet-stream',createdAt:new Date().toISOString(),status:'Pendiente de revisión',blob:file};const req=st.add(rec);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+async function agaListDocuments(){const db=await agaOpenDocDB();return new Promise((resolve,reject)=>{const tx=db.transaction(AGA_DOC_STORE,'readonly'),st=tx.objectStore(AGA_DOC_STORE),req=st.getAll();req.onsuccess=()=>resolve((req.result||[]).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt))));req.onerror=()=>reject(req.error)})}
+async function agaDeleteDocument(id){const db=await agaOpenDocDB();return new Promise((resolve,reject)=>{const tx=db.transaction(AGA_DOC_STORE,'readwrite');tx.objectStore(AGA_DOC_STORE).delete(id);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+function agaDocIcon(t,n){const x=(t||'').toLowerCase();const ext=(n||'').split('.').pop().toLowerCase();if(x.includes('pdf')||ext==='pdf')return '📄';if(x.includes('sheet')||['xlsx','xls','csv'].includes(ext))return '📊';if(x.startsWith('image/'))return '🖼️';if(ext==='json')return '🧾';return '📎'}
+function agaDocSize(n){return n<1024?`${n} B`:n<1048576?`${(n/1024).toFixed(1)} KB`:`${(n/1048576).toFixed(1)} MB`}
+async function agaRenderDocuments(){const boxes=[document.getElementById('agaDocList'),document.getElementById('analyticsDocuments')].filter(Boolean);if(!boxes.length)return;let docs=[];try{docs=await agaListDocuments()}catch(e){boxes.forEach(b=>b.innerHTML='<div class="note">El navegador no permite guardar archivos localmente. Puedes seguir usando la importación CSV.</div>');return}const html=docs.length?docs.map(d=>`<div class="aga-doc-item"><div><b>${agaDocIcon(d.type,d.name)} ${esc(d.name)}</b><br><span class="small muted">${agaDocSize(d.size)} · ${esc(new Date(d.createdAt).toLocaleString('es-ES'))}</span></div><div><span class="status low">${esc(d.status)}</span><button type="button" class="button secondary" style="margin-left:7px" onclick="agaRemoveDocument(${d.id})">Quitar</button></div></div>`).join(''):'<div class="empty">Todavía no hay documentos subidos.</div>';boxes.forEach(b=>b.innerHTML=html)}
+async function agaRemoveDocument(id){if(!confirm('¿Quitar este documento del piloto?'))return;try{await agaDeleteDocument(id);await agaRenderDocuments()}catch(e){alert('No se pudo quitar el documento.')}}
+async function agaHandleDocuments(e){const files=[...(e.target.files||[])];if(!files.length)return;const status=document.getElementById('agaDocStatus');if(status)status.textContent='Guardando documentos para revisión…';let saved=0,failed=[];let csv=null;for(const f of files){try{await agaSaveDocument(f);saved++;if(/\.csv$/i.test(f.name))csv=f}catch(err){failed.push(f.name);console.warn('No se pudo guardar',f.name,err)}}if(status)status.innerHTML=`<b>✓ ${saved} documento(s) recibido(s).</b> Revisa la lista antes de convertir datos en registros.`+(failed.length?`<br><span class="warn">No se pudieron guardar ${failed.length} archivo(s), posiblemente por falta de espacio del navegador: ${failed.map(esc).join(", ")}.</span>`:"");await agaRenderDocuments();if(csv){status.innerHTML+=`<br><span class="muted">Se ha detectado un CSV. Puedes revisarlo en la importación estructurada.</span>`;try{previewCSV({target:{files:[csv]}})}catch(err){console.warn(err)}}e.target.value=''}
+function agaInitDocDrop(){const d=document.getElementById('agaDocDrop'),i=document.getElementById('agaDocFiles');if(!d||!i||d.dataset.ready)return;d.dataset.ready='1';['dragenter','dragover'].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.style.background='#eff6ff'}));['dragleave','drop'].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.style.background=''}));d.addEventListener('drop',e=>{const files=[...e.dataTransfer.files];agaHandleDocuments({target:{files,value:''}})});}
+/* Resumen: unifica ventas, cobros y gastos confirmados; no crea cifras ficticias. */
+function agaRefreshOwnerSummary(){
+ const t=financeTotals();
+ const sales=document.getElementById('ownerKpiSales'),boxes=document.getElementById('ownerKpiBoxes'),pending=document.getElementById('ownerKpiPending'),margin=document.getElementById('ownerKpiMargin');
+ const allSales=agaidanAllSales();
+ const knownBoxes=allSales.reduce((n,x)=>n+(Number(x.boxes??x.cajas)||0),0);
+ if(sales)sales.textContent=t.salesTotal>0?moneyLocal(t.salesTotal):'Sin datos';
+ if(boxes)boxes.textContent=knownBoxes>0?knownBoxes.toLocaleString('es-ES'):'Sin datos';
+ if(pending)pending.textContent=(t.salesTotal||t.colTotal)>0?moneyLocal(t.pending):'Sin datos';
+ if(margin)margin.textContent=t.salesTotal===0&&t.expenseTotal>0?'No calculable':moneyLocal(t.margin);
+ const origin=document.querySelectorAll('.owner-kpi .data-origin');
+ if(origin[3]&&t.salesTotal===0&&t.expenseTotal>0)origin[3].textContent='Hay gastos registrados, pero faltan ventas para calcular la ganancia';
+}
+const _agaOrigRenderOwnerControl=window.renderOwnerControl;
+window.renderOwnerControl=function(){try{if(typeof _agaOrigRenderOwnerControl==='function')_agaOrigRenderOwnerControl();}finally{agaRefreshOwnerSummary()}};
+const _agaOrigRenderHome=window.renderHome;
+window.renderHome=function(){if(typeof _agaOrigRenderHome==='function')_agaOrigRenderHome();agaRefreshOwnerSummary();agaRenderDocuments();};
+const _agaOrigRenderAnalytics=window.agaidanRenderAnalytics;
+window.agaidanRenderAnalytics=function(){if(typeof _agaOrigRenderAnalytics==='function')_agaOrigRenderAnalytics();agaRenderDocuments();};
+window.addEventListener('load',()=>{agaInitDocDrop();agaRenderDocuments();agaRefreshOwnerSummary()});
+document.addEventListener('DOMContentLoaded',()=>{agaInitDocDrop();agaRenderDocuments();agaRefreshOwnerSummary()});
+
+</script>
+
+<script>document.addEventListener('DOMContentLoaded',()=>{try{agaidanRenderInactive();agaidanRenderAnalytics();}catch(e){}});</script>
+<script>
+(()=>{
+ const notice=document.getElementById('pwaInstallNotice'), install=document.getElementById('pwaInstallButton');
+ const standalone=matchMedia('(display-mode: standalone)').matches || navigator.standalone===true;
+ let promptEvent=null;
+ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(e=>console.warn('AGAIDAN: no se pudo activar el modo sin conexión',e)));
+ if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+ const dismissed=()=>sessionStorage.getItem('agaidan-install-dismissed')==='1';
+ const show=()=>{if(!standalone&&!dismissed())notice.style.display='flex'};
+ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();promptEvent=e;show()});
+ if(!standalone && /iphone|ipad|ipod/i.test(navigator.userAgent) && !dismissed()) show();
+ install.addEventListener('click',async()=>{
+  if(promptEvent){promptEvent.prompt();await promptEvent.userChoice;promptEvent=null;notice.style.display='none';return}
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent)){document.getElementById('pwaIosHelp').style.display='block';return}
+  alert('En Chrome, abre el menú ⋮ y selecciona “Instalar aplicación” o “Añadir a pantalla de inicio”.');
+ });
+ document.getElementById('pwaDismissButton').addEventListener('click',()=>{sessionStorage.setItem('agaidan-install-dismissed','1');notice.style.display='none'});
+ document.getElementById('pwaIosClose').addEventListener('click',()=>document.getElementById('pwaIosHelp').style.display='none');
+})();
+</script></body></html>

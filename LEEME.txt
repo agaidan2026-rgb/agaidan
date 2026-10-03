@@ -1,0 +1,13 @@
+AGAIDAN Web/PWA — paquete listo para desplegar
+
+CONTENIDO
+- index.html: aplicación AGAIDAN completa del piloto.
+- manifest.webmanifest: nombre, iconos y modo de apertura instalado.
+- service-worker.js: caché de la aplicación para volver a abrirla sin conexión después de la primera visita.
+- icons/: iconos de instalación y acceso directo.
+- GUIA_DESPLIEGUE.md: pasos de publicación y prueba.
+
+DATOS Y PRIVACIDAD
+Esta primera versión no tiene servidor de aplicación, cuentas ni sincronización. Los datos de negocio se guardan localmente en el navegador de este dispositivo (localStorage); documentos y fotos se guardan en IndexedDB local. No se envían al dominio de despliegue. Abrir AGAIDAN en otro móvil u ordenador crea un espacio local distinto. Haz copias/exportaciones desde la aplicación y protege el dispositivo. El almacenamiento del navegador puede borrarse o limitarse; la PWA no sustituye una copia de seguridad.
+
+Los CSV se leen en el propio dispositivo. Los documentos quedan en revisión local; la aplicación no incorpora OCR ni lectura automática. El modo sin conexión almacena únicamente el shell estático de la app, nunca documentos ni datos.
